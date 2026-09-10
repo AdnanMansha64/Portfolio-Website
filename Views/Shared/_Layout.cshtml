@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Adnan Mansha</title>
+    <link rel="stylesheet" href="~/css/portfolio.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PortfolioWebsite.styles.css" asp-append-version="true" />
+</head>
+<body style="background: var(--bg); color: var(--text); font-family: var(--font-body); margin: 0;">
+    <div class="wrap" style="padding-top: 48px;">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="wrap">
+        <span>Adnan Mansha — Erfurt, Germany</span>
+        <span><a asp-area="" asp-controller="Home" asp-action="Index" style="color: var(--accent);">Back to portfolio</a></span>
+    </footer>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
