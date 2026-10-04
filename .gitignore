@@ -4,13 +4,10 @@ obj/
 *.user
 *.suo
 
-## Generated static site (built by ./export-static.sh, published by CI)
-_site/
-
 ## IDE
 .vs/
 .idea/
-# Keep the shared editor config (it hides the generated _site/), ignore the rest.
+# Keep the shared editor config, ignore per-user state.
 .vscode/*
 !.vscode/settings.json
 

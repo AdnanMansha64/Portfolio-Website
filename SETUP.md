@@ -15,31 +15,30 @@ Operational handbook for this repository. Read the section you need — the
 There is exactly **one** copy of the page, and it is the Razor view:
 
 ```
-master branch                          ← the source you edit
-  Views/Home/Index.cshtml              ← THE page (the only copy)
-  wwwroot/css/portfolio.css            ← all styling
-  wwwroot/js/portfolio.js              ← all behaviour
+Views/Home/Index.cshtml     ← THE page (edit this)
+wwwroot/css/portfolio.css   ← all styling (edit this)
+wwwroot/js/portfolio.js     ← all behaviour (edit this)
         │
-        │   ./export-static.sh — renders the view through the real app,
-        │   rewrites asset URLs, copies wwwroot
+        │   ./export-static.sh — renders the view through the real app and
+        │   points its asset URLs at the existing wwwroot/ files
         ▼
-  _site/                               ← build output: gitignored, never committed
-        │
-        │   .github/workflows/deploy-pages.yml (on every push to master)
-        ▼
-gh-pages branch                        ← generated HTML only, force-pushed by CI
+index.html                  ← GENERATED. Commit it; never edit it.
         │
         ▼
-GitHub Pages ("Deploy from a branch")  ← the live site
+GitHub Pages (master / root)  ← the live site
 ```
 
-**Why a build step.** GitHub Pages only serves static files — it cannot execute
-ASP.NET Core. Rather than keep a second hand-maintained HTML copy next to its
-own source (which goes stale the moment you forget to regenerate it), CI renders
-the view and force-pushes the result to `gh-pages`.
+**Why a generated file.** GitHub Pages only serves static files — it cannot
+execute ASP.NET Core. So the Razor view is the source and `index.html` is a
+rendered snapshot of it, committed because Pages serves the repository directly.
 
-So `master` holds exactly one copy of the page, and the generated HTML lives on
-its own branch. **Never edit `gh-pages`** — every deploy overwrites it.
+The snapshot references `wwwroot/css/portfolio.css` and `wwwroot/js/portfolio.js`
+rather than carrying its own copies, so the CSS and JS exist once.
+
+> **`index.html` goes stale if you edit the view and don't re-run the export.**
+> That is the one hazard of this layout, so CI guards it: the
+> [Verify static export](https://github.com/AdnanMansha64/Portfolio-Website/actions)
+> job re-renders the view and fails if the committed file differs.
 
 ---
 
@@ -53,21 +52,18 @@ its own branch. **Never edit `gh-pages`** — every deploy overwrites it.
 dotnet watch
 #    → opens http://localhost:5277 with hot reload
 
-# 3. Commit and push — CI renders and deploys to Pages automatically
+# 3. Regenerate the file GitHub Pages serves
+./export-static.sh
+
+# 4. Commit BOTH the source change and the regenerated index.html
 git add -A
 git commit -m "Describe the change"
 git push
 ```
 
-That's it. There is no static file to regenerate by hand and nothing extra to
-remember. Watch the deploy at
-[Actions](https://github.com/AdnanMansha64/Portfolio-Website/actions); it takes
-about a minute.
-
-> Want to see exactly what Pages will serve before pushing?
-> `./export-static.sh && open _site/index.html`
-
----
+> **Step 3 is not optional.** Skip it and the live site keeps showing the old
+> page while the repo shows the new one. CI will fail the push to tell you, but
+> it is quicker to just run the script.
 
 ## 2. Local development
 
@@ -83,7 +79,7 @@ about a minute.
 | Run once | `dotnet run` |
 | Run on a fixed port | `dotnet run --urls http://localhost:5301` |
 | Build only | `dotnet build` |
-| Preview the static build | `./export-static.sh` → `_site/index.html` |
+| Regenerate `index.html` | `./export-static.sh` |
 | Release build (for a .NET host) | `dotnet publish -c Release -o ./publish` |
 
 `export-static.sh` uses port 5399; override with `PORT=1234 ./export-static.sh`.
@@ -131,33 +127,32 @@ Use `class="icon icon--solid"` for filled (brand) icons.
 
 ### One-time setup
 
-Order matters — the `gh-pages` branch has to exist before Pages can point at it.
-
-1. **Push `master` first** (or run **Deploy to GitHub Pages** from the
-   [Actions tab](https://github.com/AdnanMansha64/Portfolio-Website/actions)).
-   The workflow creates the `gh-pages` branch.
-2. Open **Settings → Pages**: <https://github.com/AdnanMansha64/Portfolio-Website/settings/pages>
-3. Under **Build and deployment → Source**, select **Deploy from a branch**
-4. **Branch:** `gh-pages` · **Folder:** `/ (root)` → **Save**
-   *(`gh-pages`, not `master` — master holds the Razor source, which Pages
-   cannot render)*
-5. Wait ~1 minute. The live URL appears in that panel:
+1. Open **Settings → Pages**: <https://github.com/AdnanMansha64/Portfolio-Website/settings/pages>
+2. **Source:** `Deploy from a branch`
+3. **Branch:** `master` · **Folder:** `/ (root)` → **Save**
+4. Wait ~1 minute. The live URL appears in that panel:
    `https://adnanmansha64.github.io/Portfolio-Website/`
+
+`.nojekyll` at the repository root tells Pages to serve the files as-is instead
+of running them through Jekyll.
 
 ### Every deploy after that
 
-Automatic on every push to `master`. No manual step.
+Pages republishes automatically on every push to `master`. Just make sure
+`index.html` was regenerated first (§1, step 3).
 
 ### Verifying a deploy
 
 ```bash
-curl -sI https://adnanmansha64.github.io/Portfolio-Website/ | head -1   # expect 200
+curl -s https://adnanmansha64.github.io/Portfolio-Website/ | grep -o '<title>[^<]*</title>'
 ```
+
+Expect `Adnan Mansha — Software Developer | C# / .NET`. If you get
+`Portfolio-Website`, Pages is rendering the README instead of the page — check
+that `index.html` exists at the root of `master`.
 
 Hard-refresh (<kbd>Cmd/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) if you still
 see the old page — Pages caches aggressively.
-
----
 
 ## 5. Hosting the real MVC app (optional)
 
@@ -172,8 +167,8 @@ server-rendered, able to grow a contact form, an API or a CMS — deploy it to a
 | Fly.io | Free allowance | Needs a `Dockerfile` |
 | Any VPS | ~€4/mo | `dotnet publish` + nginx reverse proxy + systemd |
 
-Nothing in the repo is Pages-specific except `export-static.sh` and the
-workflow, so both setups can run side by side.
+Nothing in the repo is Pages-specific except `export-static.sh`, `index.html`
+and `.nojekyll`, so both setups can run side by side.
 
 ---
 
@@ -182,9 +177,8 @@ workflow, so both setups can run side by side.
 | Symptom | Cause / fix |
 |---|---|
 | Live site shows old content | Check the [Actions](https://github.com/AdnanMansha64/Portfolio-Website/actions) run — a failed deploy leaves the previous version up. Then hard-refresh. |
-| Live site shows the repo file list / README | Pages is pointed at `master` instead of `gh-pages` (§4, step 4). |
-| Pages settings offers no `gh-pages` branch | The workflow hasn't run yet — push to `master` first, then set the branch (§4, step 1). |
-| Deploy fails: `permission denied` on push | The workflow needs `permissions: contents: write`, and **Settings → Actions → General → Workflow permissions** must be *Read and write*. |
+| Live site shows the repo file list / README | No `index.html` at the root of `master`, so Pages fell back to Jekyll. Run `./export-static.sh` and commit it. |
+| CI fails: "index.html is stale" | You changed the view/CSS/JS without re-exporting. Run `./export-static.sh`, commit, push. |
 | Live site unstyled (plain text) | An asset path didn't resolve. `./export-static.sh` locally — it lists every reference and exits non-zero on a miss. |
 | `export-static.sh` hangs on "Waiting for app" | Port busy. `PORT=5400 ./export-static.sh`, or read `/tmp/export-static.log`. |
 | `./export-static.sh: Permission denied` | `chmod +x export-static.sh` |
@@ -192,7 +186,7 @@ workflow, so both setups can run side by side.
 | Icons render as blank boxes | `<use href="#i-x">` has no matching `<symbol id="i-x">` in the sprite. |
 | Slider shows one card on desktop | Breakpoints live in `initSliders()` → `measure()` in `portfolio.js`. |
 | Changed CSS, browser shows old | Dev: hard-refresh. The MVC app fingerprints assets, so this is browser cache only. |
-| Edited `_site/` and nothing persisted | `_site/` is a build output and is wiped on every export. Edit the view instead. |
+| Edited `index.html` and the change vanished | It is generated and overwritten on every export. Edit `Views/Home/Index.cshtml` instead. |
 
 ---
 
@@ -204,8 +198,8 @@ workflow, so both setups can run side by side.
 - [ ] Every modal opens and closes (Esc, backdrop click, × button)
 - [ ] Slider arrows, dots, swipe and arrow keys all work
 - [ ] All external links open the right profile
-- [ ] `./export-static.sh` passes (its reference check is green)
-- [ ] Pushed to `master`; Actions run green; live URL spot-checked
+- [ ] `./export-static.sh` run and `index.html` committed
+- [ ] Pushed to `master`; "Verify static export" green; live URL spot-checked
 
 ---
 

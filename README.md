@@ -68,18 +68,20 @@ Portfolio-Website/
 │   ├── js/portfolio.js         # Theme, slider, modals, reveals, counters
 │   └── favicon.ico
 ├── .github/workflows/
-│   └── deploy-pages.yml        # Renders the view, force-pushes it to gh-pages
+│   └── verify-static.yml       # Fails CI if index.html is stale vs the view
 ├── Program.cs                  # Minimal startup — MVC + static assets
 ├── PortfolioWebsite.csproj
-├── export-static.sh            # Renders the view → _site/ (gitignored build output)
+├── export-static.sh            # Renders the view → index.html
+├── index.html                  # GENERATED snapshot served by Pages (do not edit)
+├── .nojekyll                   # Tells Pages to serve files as-is
 ├── SETUP.md                    # Setup, maintenance and deployment guide
 └── README.md
 ```
 
-**`master` contains exactly one copy of the page** — `Views/Home/Index.cshtml`.
-The static HTML that GitHub Pages serves is generated at deploy time and
-force-pushed to the `gh-pages` branch, so the generated output never sits next
-to the source it was generated from.
+`Views/Home/Index.cshtml` is the source of the page; `index.html` is a generated
+snapshot of it, committed because GitHub Pages serves the repository directly.
+The snapshot points at `wwwroot/css` and `wwwroot/js` rather than duplicating
+them, and CI fails if it drifts out of sync with the view.
 
 ## Quick start
 
@@ -97,18 +99,15 @@ For hot reload while editing, use `dotnet watch` instead.
 
 ## Updating the site
 
-Edit the view, commit, push. CI renders the page and deploys it to GitHub Pages
-automatically:
+Edit the view, regenerate the static snapshot, commit both:
 
 ```bash
+./export-static.sh
 git add -A && git commit -m "…" && git push
 ```
 
-To preview exactly what Pages will serve before pushing:
-
-```bash
-./export-static.sh && open _site/index.html
-```
+Skipping the export leaves the live site on the old page — CI fails the push to
+catch exactly that.
 
 Full details — including where to change what, how to add a project card, and
 deployment options — are in **[SETUP.md](SETUP.md)**.
@@ -126,12 +125,13 @@ A few decisions worth explaining, since they're deliberate rather than accidenta
 - **No CSS/JS framework.** The page needs a design system, a carousel and a
   modal. All three are a few hundred lines each, and writing them keeps the
   payload tiny and the behaviour exactly as intended.
-- **The page exists once on `master`.** GitHub Pages can't run ASP.NET Core, so a
-  static render is required — but keeping that render beside its own source means
-  two copies of the same page, and the committed one goes stale the first time
-  someone forgets to regenerate it. Instead CI renders the view on every push and
-  force-pushes the output to `gh-pages`, which Pages serves. Generated artifacts
-  live on a generated branch.
+- **One generated file, guarded by CI.** GitHub Pages can't run ASP.NET Core, so a
+  static `index.html` has to be committed for the site to exist. That is a second
+  copy of the page, and the hazard is obvious: edit the view, forget the export,
+  and the repo and the live site disagree. Rather than rely on discipline, the
+  `verify-static` workflow re-renders the view on every push and fails if the
+  committed file differs. The CSS and JS are not duplicated — the snapshot points
+  at the same `wwwroot/` files the app serves.
 - **Dark theme is the default.** Light theme overrides a single `[data-theme]`
   block, so there is exactly one place to keep the two palettes in sync.
 
