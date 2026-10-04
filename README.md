@@ -46,7 +46,7 @@ CONTENT.projects = [
 The markup describes **one** card of each kind and AngularJS repeats it. Two
 things fall out of that:
 
-- `index.html` is **28 KB instead of 69 KB** — the repetition is gone.
+- `index.html` is **28 KB instead of 67 KB** — the repetition is gone.
 - The detail popups duplicate **nothing**. A popup renders the same object as
   the card that opened it, so a card and its popup can never disagree.
 
@@ -91,7 +91,7 @@ Portfolio-Website/
 ├── favicon.ico
 ├── .nojekyll               # Serve files as-is, skip Jekyll
 ├── .github/workflows/
-│   └── verify-static.yml   # Checks every asset reference resolves
+│   └── verify-static.yml   # CI: asset paths, icon ids, AngularJS bindings
 ├── SETUP.md                # Setup, maintenance and deployment guide
 └── README.md
 ```
@@ -132,7 +132,7 @@ Decisions that are deliberate rather than accidental:
 - **Content as data, markup as template.** The earlier version of this page
   repeated the same card markup dozens of times and kept a second hidden copy of
   every detail block for the popups. Moving content into `CONTENT` and looping
-  with `ng-repeat` deleted both kinds of duplication and more than halved the HTML.
+  with `ng-repeat` deleted both kinds of duplication and cut the HTML by ~58%.
 - **One directive per concern.** Reveal-on-scroll, typewriter, count-up,
   proficiency bar, scroll-spy, swipe and focus-trap are seven small directives
   rather than one controller doing DOM work. Each is independently testable and

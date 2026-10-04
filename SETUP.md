@@ -30,7 +30,7 @@ skills, jobs, projects, education, certifications — is an array in the `CONTEN
 constant, rendered by `ng-repeat`. The markup describes *one* card of each kind;
 AngularJS repeats it.
 
-That is why `index.html` is ~28 KB instead of ~69 KB, and why the detail popups
+That is why `index.html` is ~28 KB instead of ~67 KB, and why the detail popups
 no longer duplicate anything: a popup reads the same object as the card that
 opened it.
 
@@ -96,6 +96,8 @@ URL-related; `file://` has stricter rules for some browser APIs.
 | Slider / popup / theme behaviour | `js/app.js` | the directives at the bottom |
 | Page title, meta, SEO, social preview | `index.html` | `<head>` |
 | Section order or overall layout | `index.html` | the `<section>` blocks |
+| The C# snippet in the hero card | `index.html` | the `<pre><code>` block — hand-written, and the only content outside `CONTENT`. Escape `<` and `>` as `&lt;`/`&gt;`, and use no `{{ }}` |
+| Footer credit line | `js/app.js` | bound to `CONTENT.profile.name` — change it there, not in the markup |
 | Favicon | `favicon.ico` | replace the file |
 
 ### Adding a project
@@ -126,6 +128,28 @@ automatically, and the popup is generated from the same object.
 
 Same idea, in `CONTENT.jobs`. Use `details: [...]` (a flat list) instead of
 `sections`, and set `current: true` on the present role to get the amber dot.
+
+### Adding or updating a certification
+
+Entries in `CONTENT.certifications` take an optional `status`, which renders as a
+pill beside the name:
+
+```js
+{ name: 'C# Essential Training 1: Types and Control Flow',
+  source: 'LinkedIn Learning · 2024' },                       // earned — no pill
+
+{ name: 'Microsoft Azure Administrator (AZ-104)',
+  source: 'Microsoft', status: 'In Progress' },                // amber pill
+
+{ name: 'Microsoft Azure DevOps Engineer Expert (AZ-400)',
+  source: 'Microsoft', status: 'Planned' }                     // muted pill
+```
+
+`'In Progress'` is highlighted in amber; any other value renders muted.
+
+**When you pass an exam, delete its `status` line** — leaving it there
+understates a credential you now hold, and keeping a `status` on something you
+have not earned is what stops the section reading as a false claim.
 
 ### Adding an icon
 
