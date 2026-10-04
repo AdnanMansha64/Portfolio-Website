@@ -1,0 +1,42 @@
+name: Verify static export
+
+# GitHub Pages serves the committed index.html from master / (root), but that file
+# is generated from Views/Home/Index.cshtml. If someone edits the view and forgets
+# to re-run ./export-static.sh, the repository and the live site silently disagree.
+#
+# This job re-renders the view and fails if the committed index.html differs, so
+# the drift is caught in the pull request instead of on the live site.
+#
+# There is no deploy job: Pages publishes master / (root) directly.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Re-render the view
+        run: OUT=/tmp/fresh-index.html ./export-static.sh
+
+      - name: Compare against the committed index.html
+        run: |
+          if diff -u index.html /tmp/fresh-index.html; then
+            echo "index.html is up to date with Views/Home/Index.cshtml"
+          else
+            echo
+            echo "::error::index.html is stale. Run ./export-static.sh and commit the result."
+            exit 1
+          fi
