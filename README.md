@@ -40,7 +40,7 @@ packages, zero runtime CDN dependencies** apart from the web fonts.
 | **Typewriter hero** | Cycles through role titles with a blinking caret |
 | **Scroll spy** | Nav highlights the section you're reading |
 | **Copy to clipboard** | One tap copies email or phone, with a toast confirmation |
-| **Fully responsive** | Single-column from 600px down, with a collapsing mobile nav |
+| **Fully responsive** | Grids stack at 1000px, nav collapses at 860px, slider drops to one card under 680px |
 | **Accessible** | Skip link, ARIA labels, keyboard-operable everything, visible focus rings |
 | **Respects preferences** | Honours `prefers-reduced-motion` and `prefers-color-scheme` |
 | **Print-friendly** | Dedicated print stylesheet — the page prints as a clean CV |
@@ -49,7 +49,7 @@ packages, zero runtime CDN dependencies** apart from the web fonts.
 ## Tech stack
 
 **Backend** · ASP.NET Core MVC 10 · C# 12 · Razor
-**Frontend** · Hand-written CSS (custom properties, grid, flexbox) · Vanilla ES5-compatible JavaScript · Inline SVG sprite
+**Frontend** · Hand-written CSS (custom properties, grid, flexbox) · Vanilla JavaScript (ES5 syntax, modern browser APIs) · Inline SVG sprite
 **Tooling** · .NET CLI · `MapStaticAssets` (build-time fingerprinting + compression) · Bash/Python static exporter
 **Hosting** · GitHub Pages (static snapshot) · any .NET host for the live app
 
@@ -91,7 +91,8 @@ cd Portfolio-Website
 dotnet run
 ```
 
-Then open the `http://localhost:####` URL printed in the terminal.
+Then open <http://localhost:5277> (the port is set in
+`Properties/launchSettings.json`).
 
 For hot reload while editing, use `dotnet watch` instead.
 
@@ -106,8 +107,8 @@ Edit the view, regenerate the static snapshot, commit both:
 git add -A && git commit -m "…" && git push
 ```
 
-Skipping the export leaves the live site on the old page — CI fails the push to
-catch exactly that.
+Skipping the export leaves the live site on the old page — the `verify-static`
+check goes red on the next push to catch exactly that.
 
 Full details — including where to change what, how to add a project card, and
 deployment options — are in **[SETUP.md](SETUP.md)**.
@@ -134,6 +135,10 @@ A few decisions worth explaining, since they're deliberate rather than accidenta
   at the same `wwwroot/` files the app serves.
 - **Dark theme is the default.** Light theme overrides a single `[data-theme]`
   block, so there is exactly one place to keep the two palettes in sync.
+- **ES5 syntax, modern APIs.** The JavaScript avoids transpilation entirely —
+  no build step, no bundler — but it does rely on `IntersectionObserver`,
+  `navigator.clipboard` and `matchMedia`, so it targets current browsers rather
+  than old ones. Each feature is wrapped so one failure can't break the page.
 
 ## Contact
 
