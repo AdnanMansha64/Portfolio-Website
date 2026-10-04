@@ -1,9 +1,11 @@
-name: Build & verify
+name: Verify
 
-# There is nothing to generate any more: docs/index.html is the single copy of
-# the page, served both by this app (web root = docs) and by GitHub Pages
-# (publishing folder = /docs). So CI just checks the project builds and that the
-# published page still references assets that exist.
+# The site is static AngularJS with no build step, so there is nothing to compile
+# and nothing to deploy — GitHub Pages serves master / (root) directly.
+#
+# What can still break silently is a broken reference: a stylesheet or script path
+# that does not resolve, or an icon id used in the data with no matching <symbol>
+# in the sprite. Both would leave the live page blank or unstyled, so CI checks them.
 
 on:
   push:
@@ -20,26 +22,64 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Build
-        run: dotnet build --nologo --warnaserror
-
-      - name: Check every local asset the page references exists
+      - name: Check local asset references resolve
         run: |
           python3 - <<'PY'
           import os, re, sys
 
-          html = open('docs/index.html', encoding='utf-8').read()
+          html = open('index.html', encoding='utf-8').read()
           refs = sorted(set(re.findall(
-              r'(?:href|src)="((?!https?:|mailto:|tel:|#|data:)[^"]+)"', html)))
+              r'(?:href|src)="((?!https?:|mailto:|tel:|#|data:|\{\{)[^"]+)"', html)))
 
-          missing = [r for r in refs if not os.path.isfile(os.path.join('docs', r.split('?')[0]))]
+          missing = [r for r in refs if not os.path.isfile(r.split('?')[0])]
           for r in refs:
               print(('ok   ' if r not in missing else 'MISS ') + r)
           if missing:
-              print(f"::error::docs/index.html references missing files: {missing}")
+              print(f"::error::index.html references missing files: {missing}")
               sys.exit(1)
+          PY
+
+      - name: Check every icon id used in the data exists in the sprite
+        run: |
+          python3 - <<'PY'
+          import re, sys
+
+          html = open('index.html', encoding='utf-8').read()
+          js   = open('js/app.js',  encoding='utf-8').read()
+
+          sprite = set(re.findall(r'<symbol id="(i-[a-z-]+)"', html))
+          used   = set(re.findall(r"icon:\s*'(i-[a-z-]+)'", js))
+          used  |= set(re.findall(r'href="#(i-[a-z-]+)"', html))
+
+          missing = sorted(used - sprite)
+          print(f"sprite defines {len(sprite)} symbols; {len(used)} referenced")
+          if missing:
+              print(f"::error::icons referenced but not defined in the sprite: {missing}")
+              sys.exit(1)
+          print("all icon references resolve")
+          PY
+
+      - name: Check the AngularJS app parses and bindings resolve
+        run: |
+          node --check js/app.js
+          python3 - <<'PY'
+          import re, sys
+
+          html = open('index.html', encoding='utf-8').read()
+          js   = open('js/app.js',  encoding='utf-8').read()
+
+          # vm.* used in the template must be assigned on the controller. The
+          # decorative <pre> code sample is excluded: it is text, not bindings.
+          sample = re.search(r'<pre>.*?</pre>', html, re.S)
+          template = html.replace(sample.group(0), '') if sample else html
+
+          used    = set(re.findall(r'\bvm\.([A-Za-z_]\w*)', template))
+          defined = set(re.findall(r'\bvm\.([A-Za-z_]\w*)\s*=', js))
+
+          missing = sorted(used - defined)
+          print(f"{len(used)} vm.* bindings used, {len(defined)} defined")
+          if missing:
+              print(f"::error::template uses undefined controller members: {missing}")
+              sys.exit(1)
+          print("all bindings resolve")
           PY
