@@ -67,13 +67,18 @@ Portfolio-Website/
 │   ├── css/portfolio.css       # Design system + all components
 │   ├── js/portfolio.js         # Theme, slider, modals, reveals, counters
 │   └── favicon.ico
+├── .github/workflows/
+│   └── deploy-pages.yml        # Renders the view and publishes to GitHub Pages
 ├── Program.cs                  # Minimal startup — MVC + static assets
 ├── PortfolioWebsite.csproj
-├── export-static.sh            # Renders the view → index.html for GitHub Pages
-├── index.html                  # GENERATED static snapshot (do not edit)
+├── export-static.sh            # Renders the view → _site/ (gitignored build output)
 ├── SETUP.md                    # Setup, maintenance and deployment guide
 └── README.md
 ```
+
+There is no second copy of the page. `Views/Home/Index.cshtml` is the only one;
+the static HTML that GitHub Pages serves is generated at deploy time into
+`_site/`, which is gitignored.
 
 ## Quick start
 
@@ -91,12 +96,17 @@ For hot reload while editing, use `dotnet watch` instead.
 
 ## Updating the site
 
-The MVC view is the source of truth; `index.html` is generated from it. After
-any change to the view, CSS or JS:
+Edit the view, commit, push. CI renders the page and deploys it to GitHub Pages
+automatically:
 
 ```bash
-./export-static.sh     # re-renders index.html for GitHub Pages
 git add -A && git commit -m "…" && git push
+```
+
+To preview exactly what Pages will serve before pushing:
+
+```bash
+./export-static.sh && open _site/index.html
 ```
 
 Full details — including where to change what, how to add a project card, and
@@ -115,10 +125,11 @@ A few decisions worth explaining, since they're deliberate rather than accidenta
 - **No CSS/JS framework.** The page needs a design system, a carousel and a
   modal. All three are a few hundred lines each, and writing them keeps the
   payload tiny and the behaviour exactly as intended.
-- **`index.html` is committed, not gitignored.** GitHub Pages serves from the
-  repository, so the generated file has to be in version control. The banner at
-  the top of it and the `export-static.sh` workflow keep it from being edited by
-  mistake.
+- **The page exists once.** GitHub Pages can't run ASP.NET Core, so a static
+  render is required — but keeping that render in the repo means two copies of
+  the same page, and the committed one goes stale the first time someone forgets
+  to regenerate it. Instead CI renders the view on every push and publishes the
+  output, so the Razor view is the only copy under version control.
 - **Dark theme is the default.** Light theme overrides a single `[data-theme]`
   block, so there is exactly one place to keep the two palettes in sync.
 

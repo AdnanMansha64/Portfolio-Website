@@ -12,48 +12,53 @@ Operational handbook for this repository. Read the section you need — the
 
 ## 0. How this project is wired
 
-There is **one** source of truth for the page and **one** generated copy of it:
+There is exactly **one** copy of the page, and it is the Razor view:
 
 ```
-Views/Home/Index.cshtml   ← the page (edit this)
-wwwroot/css/portfolio.css ← all styling (edit this)
-wwwroot/js/portfolio.js   ← all behaviour (edit this)
+Views/Home/Index.cshtml     ← THE page (edit this)
+wwwroot/css/portfolio.css   ← all styling (edit this)
+wwwroot/js/portfolio.js     ← all behaviour (edit this)
         │
-        │  ./export-static.sh  (renders the view, rewrites asset URLs)
+        │   ./export-static.sh — renders the view through the real app,
+        │   rewrites asset URLs, copies wwwroot
         ▼
-index.html                ← GENERATED. Never edit by hand.
+_site/                      ← build output: gitignored, never committed
+        │
+        │   .github/workflows/deploy-pages.yml (runs on every push to master)
+        ▼
+GitHub Pages                ← the live site
 ```
 
-**Why both exist.** GitHub Pages only serves static files — it cannot execute
-ASP.NET Core. So the MVC app is the real project, and `index.html` is a
-rendered snapshot of it that Pages can serve. Editing `index.html` directly
-means your change is silently thrown away on the next export.
+**Why a build step.** GitHub Pages only serves static files — it cannot execute
+ASP.NET Core. Rather than keep a second hand-maintained HTML copy in the repo
+(which drifts out of sync the moment you forget to update it), CI renders the
+view and publishes the result. The repository stays single-source.
 
 ---
 
 ## 1. Routine update checklist
-
-Run through this every time you change the site:
 
 ```bash
 # 1. Edit content/styles/behaviour
 #    Views/Home/Index.cshtml · wwwroot/css/portfolio.css · wwwroot/js/portfolio.js
 
 # 2. Check it locally
-dotnet run
-#    → open the printed http://localhost:#### URL
+dotnet watch
+#    → opens http://localhost:5277 with hot reload
 
-# 3. Regenerate the static copy GitHub Pages serves
-./export-static.sh
-
-# 4. Commit BOTH the source change and the regenerated index.html
+# 3. Commit and push — CI renders and deploys to Pages automatically
 git add -A
 git commit -m "Describe the change"
 git push
 ```
 
-> **Step 3 is not optional.** Skip it and the live Pages site keeps showing the
-> old content while the repo shows the new content.
+That's it. There is no static file to regenerate by hand and nothing extra to
+remember. Watch the deploy at
+[Actions](https://github.com/AdnanMansha64/Portfolio-Website/actions); it takes
+about a minute.
+
+> Want to see exactly what Pages will serve before pushing?
+> `./export-static.sh && open _site/index.html`
 
 ---
 
@@ -71,10 +76,12 @@ git push
 | Run once | `dotnet run` |
 | Run on a fixed port | `dotnet run --urls http://localhost:5301` |
 | Build only | `dotnet build` |
-| Release build | `dotnet publish -c Release -o ./publish` |
-| Regenerate `index.html` | `./export-static.sh` |
+| Preview the static build | `./export-static.sh` → `_site/index.html` |
+| Release build (for a .NET host) | `dotnet publish -c Release -o ./publish` |
 
-The static export defaults to port 5399; override with `PORT=1234 ./export-static.sh`.
+`export-static.sh` uses port 5399; override with `PORT=1234 ./export-static.sh`.
+It fails loudly if any asset reference in the generated page doesn't resolve, so
+a green run means Pages will not 404.
 
 ---
 
@@ -89,6 +96,7 @@ The static export defaults to port 5399; override with `PORT=1234 ./export-stati
 | Slider / modal / theme behaviour | `wwwroot/js/portfolio.js` | One `init*()` function per feature |
 | Page title, meta, SEO, social preview | `Views/Home/Index.cshtml` | `<head>` section |
 | Favicon | `wwwroot/favicon.ico` | Replace the file |
+| Deployment steps | `.github/workflows/deploy-pages.yml` | |
 
 ### Adding a new project card
 
@@ -117,15 +125,16 @@ Use `class="icon icon--solid"` for filled (brand) icons.
 ### One-time setup
 
 1. Open **Settings → Pages**: <https://github.com/AdnanMansha64/Portfolio-Website/settings/pages>
-2. **Source:** `Deploy from a branch`
-3. **Branch:** `master` · **Folder:** `/ (root)` → **Save**
-4. Wait ~1 minute. The live URL appears in that same settings panel:
+2. Under **Build and deployment → Source**, select **GitHub Actions**
+   *(not "Deploy from a branch" — the site is built by the workflow)*
+3. Push to `master`, or trigger **Deploy to GitHub Pages** manually from the
+   Actions tab.
+4. The live URL appears in the workflow run and in the Pages settings panel:
    `https://adnanmansha64.github.io/Portfolio-Website/`
 
 ### Every deploy after that
 
-Pages republishes automatically on every push to `master`. Just make sure
-`index.html` was regenerated (§1, step 3) before you pushed.
+Automatic on every push to `master`. No manual step.
 
 ### Verifying a deploy
 
@@ -140,18 +149,19 @@ see the old page — Pages caches aggressively.
 
 ## 5. Hosting the real MVC app (optional)
 
-GitHub Pages serves only the static snapshot. To put the actual ASP.NET Core
-app online — server-rendered, able to grow a contact form, an API or a CMS —
-deploy it to a .NET host:
+Pages serves a static render. To put the actual ASP.NET Core app online —
+server-rendered, able to grow a contact form, an API or a CMS — deploy it to a
+.NET host:
 
 | Option | Cost | Notes |
 |---|---|---|
 | Azure App Service | Free F1 tier available | `az webapp up --runtime "DOTNET:10"` — tightest .NET integration |
-| Render / Railway | Free tier | Point at the repo, set build `dotnet publish -c Release` |
+| Render / Railway | Free tier | Point at the repo, build `dotnet publish -c Release` |
 | Fly.io | Free allowance | Needs a `Dockerfile` |
 | Any VPS | ~€4/mo | `dotnet publish` + nginx reverse proxy + systemd |
 
-The repo stays the same either way; only `index.html` is Pages-specific.
+Nothing in the repo is Pages-specific except `export-static.sh` and the
+workflow, so both setups can run side by side.
 
 ---
 
@@ -159,15 +169,16 @@ The repo stays the same either way; only `index.html` is Pages-specific.
 
 | Symptom | Cause / fix |
 |---|---|
-| Live site shows old content | `index.html` wasn't regenerated. Run `./export-static.sh`, commit, push. |
-| Live site unstyled (plain text) | Asset paths broken. Re-run `./export-static.sh` — it warns about any absolute paths Pages can't serve. |
-| `export-static.sh` hangs on "Waiting for app" | Port busy. `PORT=5400 ./export-static.sh`, or check `/tmp/export-static.log`. |
+| Live site shows old content | Check the [Actions](https://github.com/AdnanMansha64/Portfolio-Website/actions) run — a failed deploy leaves the previous version up. Then hard-refresh. |
+| Deploy fails: "Pages site not found" | Pages **Source** isn't set to **GitHub Actions** (§4). |
+| Live site unstyled (plain text) | An asset path didn't resolve. `./export-static.sh` locally — it lists every reference and exits non-zero on a miss. |
+| `export-static.sh` hangs on "Waiting for app" | Port busy. `PORT=5400 ./export-static.sh`, or read `/tmp/export-static.log`. |
 | `./export-static.sh: Permission denied` | `chmod +x export-static.sh` |
-| Razor error: `@` in content | Literal `@` must be escaped as `@@` in `.cshtml` (e.g. email addresses). |
+| Razor error around `@` | Literal `@` must be escaped as `@@` in `.cshtml` (e.g. email addresses). |
 | Icons render as blank boxes | `<use href="#i-x">` has no matching `<symbol id="i-x">` in the sprite. |
 | Slider shows one card on desktop | Breakpoints live in `initSliders()` → `measure()` in `portfolio.js`. |
-| Changed CSS, browser shows old | Dev: hard-refresh. Live: confirm you re-exported and pushed. |
-| 404 on Pages after first setup | Pages needs ~1 min on first publish; confirm branch is `master`, folder `/ (root)`. |
+| Changed CSS, browser shows old | Dev: hard-refresh. The MVC app fingerprints assets, so this is browser cache only. |
+| Edited `_site/` and nothing persisted | `_site/` is a build output and is wiped on every export. Edit the view instead. |
 
 ---
 
@@ -179,8 +190,8 @@ The repo stays the same either way; only `index.html` is Pages-specific.
 - [ ] Every modal opens and closes (Esc, backdrop click, × button)
 - [ ] Slider arrows, dots, swipe and arrow keys all work
 - [ ] All external links open the right profile
-- [ ] `./export-static.sh` run, `index.html` committed
-- [ ] Pushed to `master`, live URL spot-checked
+- [ ] `./export-static.sh` passes (its reference check is green)
+- [ ] Pushed to `master`; Actions run green; live URL spot-checked
 
 ---
 
