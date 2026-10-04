@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="portfolio">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Adnan Mansha — Software Developer | C# / .NET</title>
+<meta name="description" content="Adnan Mansha — Software Developer with 4+ years in C#, .NET, ASP.NET Core and WPF/MVVM. Backend services, REST APIs and concurrent systems. Erfurt, Germany." />
+<meta name="author" content="Adnan Mansha" />
+<meta name="theme-color" content="#0B1014" />
+<meta name="keywords" content="Adnan Mansha, Software Developer, C#, .NET, ASP.NET Core, WPF, MVVM, Backend Developer, AngularJS, Erfurt, Germany" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Adnan Mansha — Software Developer | C# / .NET" />
+<meta property="og:description" content="4+ years building scalable backend services and WPF/MVVM desktop systems in C# and .NET." />
+<meta property="og:url" content="https://adnanmansha64.github.io/Portfolio-Website/" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="https://adnanmansha64.github.io/Portfolio-Website/" />
+
+<link rel="icon" href="favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/portfolio.css" />
+</head>
+
+<body ng-controller="PortfolioController as vm" ng-cloak>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<noscript>
+  <div class="wrap" style="padding-block:40px">
+    <h1>Adnan Mansha — Software Developer (C# / .NET)</h1>
+    <p>Results-oriented developer with 4+ years building scalable backend services and
+       cross-platform applications in C#, .NET and ASP.NET Core. Experienced in RESTful
+       APIs, WPF/MVVM desktop systems, and TCP/IP architecture. M.Sc. in Automotive
+       Software Engineering. Based in Erfurt, Germany.</p>
+    <p>Contact: <a href="mailto:adnanmansha64@gmail.com">adnanmansha64@gmail.com</a> ·
+       <a href="https://www.linkedin.com/in/adnan-mansha-278a46108/">LinkedIn</a> ·
+       <a href="https://github.com/AdnanMansha64">GitHub</a></p>
+    <p><strong>This page renders with JavaScript — please enable it for the full portfolio.</strong></p>
+  </div>
+</noscript>
+
+<!-- ---------- SVG icon sprite (defined once, referenced via <use>) ---------- -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.3A8.5 8.5 0 1 1 9.7 3.5a6.8 6.8 0 0 0 10.8 10.8z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-chev-left" viewBox="0 0 24 24"><path d="M15 18 9 12l6-6"/></symbol>
+    <symbol id="i-chev-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2.2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M21 16.9v2.6a1.6 1.6 0 0 1-1.8 1.6 16.2 16.2 0 0 1-7-2.5 15.9 15.9 0 0 1-4.9-4.9 16.2 16.2 0 0 1-2.5-7A1.6 1.6 0 0 1 6.4 3H9a1.6 1.6 0 0 1 1.6 1.4c.1.9.3 1.7.6 2.5a1.6 1.6 0 0 1-.4 1.7l-1 1a13 13 0 0 0 4.9 4.9l1-1a1.6 1.6 0 0 1 1.7-.4c.8.3 1.6.5 2.5.6A1.6 1.6 0 0 1 21 16.9z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.8"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/></symbol>
+    <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8.5" ry="3.3"/><path d="M3.5 5.5v13c0 1.8 3.8 3.3 8.5 3.3s8.5-1.5 8.5-3.3v-13M3.5 12c0 1.8 3.8 3.3 8.5 3.3s8.5-1.5 8.5-3.3"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .3-9 6.5 6.5 0 0 0-12.4 2A3.8 3.8 0 0 0 6 19z"/></symbol>
+    <symbol id="i-beaker" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L4.8 18A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.7-3L14 9.5V3M7 14h10"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 21h18M7 21v-8M12 21V6M17 21v-5"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H6.4A3.4 3.4 0 0 0 3 18.4V20"/><circle cx="9.5" cy="8" r="3.4"/><path d="M21 20v-1.6a3.4 3.4 0 0 0-2.6-3.3M15.5 4.8a3.4 3.4 0 0 1 0 6.4"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.5 5.5a4.5 4.5 0 0 0 5.9 5.9L21 12l-8.5 8.5a2.5 2.5 0 0 1-3.5-3.5L17.5 8.5z"/><path d="M6.5 11 3 7.5a2.5 2.5 0 0 1 3.5-3.5L10 7.5"/></symbol>
+    <symbol id="i-branch" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2.4"/><circle cx="6" cy="19" r="2.4"/><circle cx="18" cy="8" r="2.4"/><path d="M6 7.4v9.2M18 10.4c0 4-4 3.6-6 5.6"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="2.5" y="7.5" width="19" height="13" rx="2"/><path d="M8.5 7.5V5.5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2M2.5 12.5h19"/></symbol>
+    <symbol id="i-cap" viewBox="0 0 24 24"><path d="M12 3 1.5 8.5 12 14l10.5-5.5L12 3z"/><path d="M5.5 11v5c0 1.8 2.9 3.3 6.5 3.3s6.5-1.5 6.5-3.3v-5"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.4 14.2 7 22l5-3 5 3-1.4-7.8"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24" class="icon--solid"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24" class="icon--solid"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.063 2.063 0 0 1 0 4.125zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/></symbol>
+    <symbol id="i-xing" viewBox="0 0 24 24" class="icon--solid"><path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.013 0-.02L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.379-4.155c-.172-.315-.434-.659-.962-.659H3.648z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ---------- NAVIGATION ---------- -->
+<header class="nav">
+  <nav class="nav-inner" aria-label="Main navigation" am-scroll-spy="vm.activeSection">
+    <a class="nav-mark" href="#top">
+      <span class="nav-mark-badge">AM</span>
+      <span class="nav-mark-text">{{ vm.profile.name }}</span>
+    </a>
+
+    <ul class="nav-links" id="nav-links" ng-class="{'is-open': vm.navOpen}">
+      <li ng-repeat="s in vm.sections">
+        <a href="#{{ s.id }}"
+           ng-class="{'is-active': vm.activeSection === s.id}"
+           ng-click="vm.closeNav()">{{ s.label }}</a>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="icon-btn" type="button" ng-click="vm.toggleTheme()"
+              aria-label="Switch theme">
+        <svg class="icon" ng-if="vm.theme === 'dark'"><use href="#i-moon"></use></svg>
+        <svg class="icon" ng-if="vm.theme === 'light'"><use href="#i-sun"></use></svg>
+      </button>
+      <button class="icon-btn nav-toggle" type="button" ng-click="vm.toggleNav()"
+              aria-controls="nav-links" aria-label="Toggle navigation menu"
+              ng-attr-aria-expanded="{{ vm.navOpen }}">
+        <svg class="icon"><use href="#i-menu"></use></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ---------- HERO ---------- -->
+  <section id="top" class="hero">
+    <div class="wrap hero-grid">
+      <div am-reveal>
+        <span class="badge"><span class="pulse"></span>Available immediately · Open to new roles</span>
+
+        <h1>Hi, I'm <span class="accent">{{ vm.profile.name }}</span></h1>
+        <p class="hero-role" am-typing="vm.profile.roles">{{ vm.profile.roles[0] }}</p>
+        <p class="hero-summary">{{ vm.profile.summary }}</p>
+
+        <div class="hero-meta">
+          <span><svg class="icon"><use href="#i-pin"></use></svg>{{ vm.profile.location }}</span>
+          <span><svg class="icon"><use href="#i-check"></use></svg>Permanent residency — no visa sponsorship</span>
+          <span><svg class="icon"><use href="#i-briefcase"></use></svg>Open to relocation within Germany</span>
+        </div>
+
+        <div class="hero-cta">
+          <a class="btn btn-primary" ng-href="mailto:{{ vm.profile.email }}">
+            <svg class="icon"><use href="#i-mail"></use></svg>Get in touch
+          </a>
+          <a class="btn" href="#projects">
+            <svg class="icon"><use href="#i-code"></use></svg>View my work
+          </a>
+        </div>
+
+        <div class="socials">
+          <a class="social" ng-href="{{ vm.profile.linkedin }}" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon--solid"><use href="#i-linkedin"></use></svg>LinkedIn
+          </a>
+          <a class="social" ng-href="{{ vm.profile.xing }}" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon--solid"><use href="#i-xing"></use></svg>Xing
+          </a>
+          <a class="social" ng-href="{{ vm.profile.github }}" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon--solid"><use href="#i-github"></use></svg>GitHub
+          </a>
+          <a class="social" ng-href="mailto:{{ vm.profile.email }}">
+            <svg class="icon"><use href="#i-mail"></use></svg>Email
+          </a>
+          <a class="social" ng-href="{{ vm.profile.phoneHref }}">
+            <svg class="icon"><use href="#i-phone"></use></svg>{{ vm.profile.phone }}
+          </a>
+        </div>
+      </div>
+
+      <aside class="hero-aside" am-reveal="140">
+        <div class="code-card">
+          <div class="code-head">
+            <span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
+            <span class="code-file">app.js</span>
+          </div>
+<pre><code><span class="tok-cmt">// this page is an AngularJS app</span>
+angular.module(<span class="tok-str">'portfolio'</span>, [])
+  .controller(<span class="tok-str">'PortfolioController'</span>, [
+    <span class="tok-str">'CONTENT'</span>, <span class="tok-key">function</span> (<span class="tok-type">CONTENT</span>) {
+      <span class="tok-key">var</span> vm = <span class="tok-key">this</span>;
+
+      vm.name  = <span class="tok-str">'Adnan Mansha'</span>;
+      vm.focus = <span class="tok-str">'C# / .NET'</span>;
+      vm.stack = [
+        <span class="tok-str">'ASP.NET Core MVC'</span>,
+        <span class="tok-str">'WPF + MVVM'</span>,
+        <span class="tok-str">'REST APIs'</span>,
+        <span class="tok-str">'TCP/IP + async'</span>
+      ];
+    }
+  ]);</code></pre>
+        </div>
+
+        <div class="stats">
+          <div class="stat" ng-repeat="s in vm.stats">
+            <div class="stat-num">
+              <span ng-if="s.text">{{ s.text }}</span>
+              <span ng-if="!s.text" am-count="{{ s.value }}" am-count-suffix="{{ s.suffix }}">{{ s.value }}{{ s.suffix }}</span>
+            </div>
+            <div class="stat-label">{{ s.label }}</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ---------- ABOUT ---------- -->
+  <section id="about" class="section">
+    <div class="wrap">
+      <div class="section-head" am-reveal>
+        <span class="section-num">01</span>
+        <h2>What I do</h2>
+      </div>
+      <p class="section-sub" am-reveal>
+        I build the parts of a system that have to be correct under load — services, APIs
+        and desktop clients that talk to real hardware — and I back them with tests.
+      </p>
+
+      <div class="skills-grid">
+        <article class="card" ng-repeat="a in vm.about" am-reveal="{{ $index * 80 }}">
+          <div class="card-icon"><svg class="icon"><use ng-attr-href="#{{ a.icon }}"></use></svg></div>
+          <h3>{{ a.title }}</h3>
+          <p class="proj-desc">{{ a.text }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- SKILLS ---------- -->
+  <section id="skills" class="section">
+    <div class="wrap">
+      <div class="section-head" am-reveal>
+        <span class="section-num">02</span>
+        <h2>Skills &amp; technologies</h2>
+      </div>
+      <p class="section-sub" am-reveal>
+        Core proficiencies first, then the full toolbox grouped by area.
+      </p>
+
+      <div class="bars" am-reveal>
+        <div class="bar" ng-repeat="p in vm.proficiencies">
+          <div class="bar-top"><strong>{{ p.name }}</strong><span class="bar-pct">{{ p.level }}%</span></div>
+          <div class="bar-track"><div class="bar-fill" am-bar="{{ p.level }}"></div></div>
+        </div>
+      </div>
+
+      <div class="skills-grid">
+        <article class="card skill-card" ng-repeat="g in vm.skillGroups" am-reveal="{{ ($index % 4) * 60 }}">
+          <div class="card-icon"><svg class="icon"><use ng-attr-href="#{{ g.icon }}"></use></svg></div>
+          <h3>{{ g.title }}</h3>
+          <div class="tags">
+            <span class="tag" ng-repeat="t in g.tags"
+                  ng-class="{'tag--accent': g.lead && $index === 0}">{{ t }}</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- EXPERIENCE ---------- -->
+  <section id="experience" class="section">
+    <div class="wrap">
+      <div class="section-head" am-reveal>
+        <span class="section-num">03</span>
+        <h2>Work experience</h2>
+      </div>
+      <p class="section-sub" am-reveal>
+        Six roles across production software, consulting and research. Select any role for
+        the full breakdown of what I delivered.
+      </p>
+
+      <div class="timeline">
+        <div class="job" ng-repeat="job in vm.jobs"
+             ng-class="{'job--current': job.current}" am-reveal>
+          <article class="card job-card">
+            <div class="job-head">
+              <div>
+                <h3 class="job-title">
+                  {{ job.title }}
+                  <span class="place" ng-if="job.titleNote">{{ job.titleNote }}</span>
+                </h3>
+                <p class="job-org">{{ job.org }} <span class="place">· {{ job.place }}</span></p>
+              </div>
+              <span class="job-date">
+                <svg class="icon"><use href="#i-calendar"></use></svg>{{ job.date }}
+              </span>
+            </div>
+            <p class="job-excerpt">{{ job.excerpt }}</p>
+            <div class="job-foot">
+              <div class="tags">
+                <span class="tag" ng-repeat="t in job.tags"
+                      ng-class="{'tag--accent': $index === 0}">{{ t }}</span>
+              </div>
+              <button class="link-more" type="button"
+                      ng-click="vm.openModal(job, vm.jobEyebrow(job))">
+                View details <svg class="icon"><use href="#i-arrow-right"></use></svg>
+              </button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- PROJECTS (slider) ---------- -->
+  <section id="projects" class="section">
+    <div class="wrap">
+      <div class="section-head" am-reveal>
+        <span class="section-num">04</span>
+        <h2>Selected work</h2>
+      </div>
+      <p class="section-sub" am-reveal>
+        Production features and academic projects. Swipe or use the arrows — select a card
+        for the full engineering story.
+      </p>
+
+      <div class="slider" tabindex="0" role="region" aria-label="Selected work carousel"
+           am-swipe am-swipe-next="vm.next()" am-swipe-prev="vm.prev()" am-reveal>
+        <div class="slider-viewport">
+          <div class="slider-track" ng-style="vm.trackShift()">
+            <div class="slide" ng-repeat="p in vm.projects"
+                 ng-style="{'flex-basis': vm.slideBasis()}">
+              <article class="card">
+                <div class="card-icon"><svg class="icon"><use ng-attr-href="#{{ p.icon }}"></use></svg></div>
+                <div class="proj-top"><h3 class="proj-title">{{ p.title }}</h3></div>
+                <span class="proj-context">{{ p.context }}</span>
+                <p class="proj-desc">{{ p.desc }}</p>
+                <div class="tags">
+                  <span class="tag" ng-repeat="t in p.tags"
+                        ng-class="{'tag--accent': $index === 0}">{{ t }}</span>
+                </div>
+                <div class="job-foot" style="margin-top:16px">
+                  <button class="link-more" type="button"
+                          ng-click="vm.openModal(p, p.context)"
+                          ng-attr-tabindex="{{ vm.slideVisible($index) ? undefined : -1 }}">
+                    Read more <svg class="icon"><use href="#i-arrow-right"></use></svg>
+                  </button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider-controls">
+          <button class="icon-btn" type="button" ng-click="vm.prev()"
+                  ng-disabled="vm.slide === 0" aria-label="Previous projects">
+            <svg class="icon"><use href="#i-chev-left"></use></svg>
+          </button>
+          <div class="slider-dots">
+            <button class="dot" ng-repeat="d in vm.dots()" type="button"
+                    ng-class="{'is-active': vm.slide === d}"
+                    ng-click="vm.go(d)"
+                    aria-label="Go to slide {{ d + 1 }}"></button>
+          </div>
+          <button class="icon-btn" type="button" ng-click="vm.next()"
+                  ng-disabled="vm.slide >= vm.maxSlide" aria-label="Next projects">
+            <svg class="icon"><use href="#i-chev-right"></use></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- EDUCATION & CERTIFICATIONS ---------- -->
+  <section id="education" class="section">
+    <div class="wrap">
+      <div class="section-head" am-reveal>
+        <span class="section-num">05</span>
+        <h2>Education &amp; certifications</h2>
+      </div>
+      <p class="section-sub" am-reveal>
+        Formal grounding in software and automotive systems engineering, kept current with
+        focused C# coursework.
+      </p>
+
+      <div class="edu-grid">
+        <article class="card" ng-repeat="e in vm.education" am-reveal="{{ $index * 80 }}">
+          <div class="card-icon"><svg class="icon"><use href="#i-cap"></use></svg></div>
+          <span class="job-date"><svg class="icon"><use href="#i-calendar"></use></svg>{{ e.date }}</span>
+          <h3 class="job-title" style="margin-top:8px">{{ e.degree }}</h3>
+          <p class="job-org">{{ e.school }} <span class="place">· {{ e.place }}</span></p>
+        </article>
+      </div>
+
+      <h3 class="sub-head" am-reveal>Certifications</h3>
+      <div class="cert-grid">
+        <article class="card cert" ng-repeat="c in vm.certifications" am-reveal="{{ $index * 80 }}">
+          <div class="card-icon"><svg class="icon"><use href="#i-award"></use></svg></div>
+          <div>
+            <p class="cert-name">{{ c.name }}</p>
+            <span class="cert-src">{{ c.source }}</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="lang-row" am-reveal>
+        <div ng-repeat="l in vm.languages"><strong>{{ l.name }}</strong> — {{ l.level }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- CONTACT ---------- -->
+  <section id="contact" class="section">
+    <div class="wrap">
+      <div class="section-head" am-reveal>
+        <span class="section-num">06</span>
+        <h2>Get in touch</h2>
+      </div>
+
+      <div class="contact-grid">
+        <div am-reveal>
+          <p class="contact-lead">
+            Open to C#/.NET backend and full-stack roles in Germany. Permanent residency in
+            place — no visa sponsorship required — and available to start immediately.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" ng-href="mailto:{{ vm.profile.email }}">
+              <svg class="icon"><use href="#i-mail"></use></svg>Send an email
+            </a>
+            <a class="btn" ng-href="{{ vm.profile.linkedin }}" target="_blank" rel="noopener noreferrer">
+              <svg class="icon icon--solid"><use href="#i-linkedin"></use></svg>Connect on LinkedIn
+            </a>
+          </div>
+        </div>
+
+        <ul class="contact-list" am-reveal="100">
+          <li>
+            <a class="contact-row" ng-href="mailto:{{ vm.profile.email }}">
+              <span class="card-icon"><svg class="icon"><use href="#i-mail"></use></svg></span>
+              <span>
+                <span class="contact-label">Email</span>
+                <span class="contact-value">{{ vm.profile.email }}</span>
+              </span>
+              <button class="icon-btn copy" type="button"
+                      ng-click="vm.copy(vm.profile.email, $event)" aria-label="Copy email address">
+                <svg class="icon"><use href="#i-copy"></use></svg>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a class="contact-row" ng-href="{{ vm.profile.phoneHref }}">
+              <span class="card-icon"><svg class="icon"><use href="#i-phone"></use></svg></span>
+              <span>
+                <span class="contact-label">Phone</span>
+                <span class="contact-value">{{ vm.profile.phone }}</span>
+              </span>
+              <button class="icon-btn copy" type="button"
+                      ng-click="vm.copy(vm.profile.phone, $event)" aria-label="Copy phone number">
+                <svg class="icon"><use href="#i-copy"></use></svg>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a class="contact-row" ng-href="{{ vm.profile.linkedin }}" target="_blank" rel="noopener noreferrer">
+              <span class="card-icon"><svg class="icon icon--solid"><use href="#i-linkedin"></use></svg></span>
+              <span>
+                <span class="contact-label">LinkedIn</span>
+                <span class="contact-value">in/adnan-mansha-278a46108</span>
+              </span>
+              <svg class="icon copy" style="color:var(--text-faint)"><use href="#i-external"></use></svg>
+            </a>
+          </li>
+          <li>
+            <a class="contact-row" ng-href="{{ vm.profile.xing }}" target="_blank" rel="noopener noreferrer">
+              <span class="card-icon"><svg class="icon icon--solid"><use href="#i-xing"></use></svg></span>
+              <span>
+                <span class="contact-label">Xing</span>
+                <span class="contact-value">profile/Adnan_Mansha</span>
+              </span>
+              <svg class="icon copy" style="color:var(--text-faint)"><use href="#i-external"></use></svg>
+            </a>
+          </li>
+          <li>
+            <a class="contact-row" ng-href="{{ vm.profile.github }}" target="_blank" rel="noopener noreferrer">
+              <span class="card-icon"><svg class="icon icon--solid"><use href="#i-github"></use></svg></span>
+              <span>
+                <span class="contact-label">GitHub</span>
+                <span class="contact-value">AdnanMansha64</span>
+              </span>
+              <svg class="icon copy" style="color:var(--text-faint)"><use href="#i-external"></use></svg>
+            </a>
+          </li>
+          <li>
+            <div class="contact-row">
+              <span class="card-icon"><svg class="icon"><use href="#i-pin"></use></svg></span>
+              <span>
+                <span class="contact-label">Location</span>
+                <span class="contact-value">{{ vm.profile.location }}</span>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ---------- FOOTER ---------- -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>© {{ vm.year }} {{ vm.profile.name }} · {{ vm.profile.location }}</span>
+    <span>
+      Built with AngularJS ·
+      <a ng-href="{{ vm.profile.repo }}" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<button class="icon-btn to-top" type="button" ng-click="vm.toTop()"
+        ng-class="{'is-shown': vm.showToTop}" aria-label="Back to top">
+  <svg class="icon"><use href="#i-arrow-up"></use></svg>
+</button>
+
+<!-- ---------- DETAIL POPUP (content comes from the same object as the card) ---------- -->
+<div class="modal is-open" ng-if="vm.modal" ng-click="vm.closeModal()"
+     role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-dialog" tabindex="-1" ng-click="$event.stopPropagation()" am-focus-trap>
+    <header class="modal-head">
+      <div>
+        <span class="modal-eyebrow">{{ vm.modal.eyebrow }}</span>
+        <h3 id="modal-title">{{ vm.modal.title }}</h3>
+      </div>
+      <button class="icon-btn" type="button" ng-click="vm.closeModal()" aria-label="Close dialog">
+        <svg class="icon"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="modal-body">
+      <div ng-repeat="sec in vm.modal.sections">
+        <h4>{{ sec.heading }}</h4>
+        <ul>
+          <li ng-repeat="item in sec.items">
+            <strong ng-if="item.lead">{{ item.lead }}</strong> {{ item.text }}
+          </li>
+        </ul>
+      </div>
+      <h4 ng-if="vm.modal.stack.length">Stack</h4>
+      <div class="tags" ng-if="vm.modal.stack.length">
+        <span class="tag" ng-repeat="t in vm.modal.stack"
+              ng-class="{'tag--accent': $index === 0}">{{ t }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="copy-toast" ng-class="{'is-shown': vm.toast}" role="status" aria-live="polite">{{ vm.toast }}</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
