@@ -4,7 +4,7 @@ Operational handbook for this repository. Read the section you need — the
 [routine update checklist](#1-routine-update-checklist) covers 90% of the work.
 
 - **Project:** Adnan Mansha — personal portfolio
-- **Stack:** ASP.NET Core (.NET 10), no client-side framework
+- **Stack:** AngularJS 1.8.3 · hand-written CSS · static hosting (no backend, no build step)
 - **Repository:** <https://github.com/AdnanMansha64/Portfolio-Website>
 - **Live (GitHub Pages):** <https://adnanmansha64.github.io/Portfolio-Website/>
 
@@ -12,42 +12,47 @@ Operational handbook for this repository. Read the section you need — the
 
 ## 0. How this project is wired
 
-**There is exactly one copy of the page: `docs/index.html`.** Both the app and
-GitHub Pages serve that same file.
+A static AngularJS single-page app. **Four files, no build step, no server.**
 
 ```
-docs/
-├── index.html          ← THE page (edit this)
-├── css/portfolio.css   ← all styling (edit this)
-├── js/portfolio.js     ← all behaviour (edit this)
-└── favicon.ico
+index.html          ← the AngularJS template (markup + SVG icon sprite)
+css/portfolio.css   ← all styling, both themes
+js/app.js           ← the AngularJS app: ALL page content + behaviour
+favicon.ico
+.nojekyll           ← tells Pages to serve the files as-is
      │
-     ├── locally:  dotnet run  → web root = docs/  → http://localhost:5277
-     └── live:     GitHub Pages, publishing folder = /docs
+     ├── locally:  open index.html in a browser (no server needed)
+     └── live:     GitHub Pages, branch master, folder / (root)
 ```
 
-**Why `docs/` and not `wwwroot/`.** GitHub Pages can only publish from a
-branch's root or from a folder named exactly `/docs`. Pointing the ASP.NET app's
-web root at `docs/` therefore makes one directory serve both purposes — the file
-you edit is byte-for-byte the file that goes live. Asset URLs inside the page are
-relative (`css/portfolio.css`), so they resolve identically whether the page is
-served at `/` by the app or at `/Portfolio-Website/` by Pages.
+**Content lives in `js/app.js`, not in the markup.** Every list on the page —
+skills, jobs, projects, education, certifications — is an array in the `CONTENT`
+constant, rendered by `ng-repeat`. The markup describes *one* card of each kind;
+AngularJS repeats it.
 
-**No build step, no generated files, nothing to keep in sync.** Earlier versions
-of this project rendered a Razor view into a second static copy; that copy and
-the script which produced it are gone.
+That is why `index.html` is ~28 KB instead of ~69 KB, and why the detail popups
+no longer duplicate anything: a popup reads the same object as the card that
+opened it.
+
+**There is exactly one HTML file.** No Razor view, no generated copy, nothing to
+keep in sync. The previous ASP.NET Core project was removed.
+
+> **Caveat worth knowing:** AngularJS 1.x reached end-of-life in **January 2022**
+> and receives no security patches. It is loaded from cdnjs. For a static
+> portfolio with no user input and no authentication the practical risk is low,
+> but it is a dead framework — see §7 if you later want to move off it.
 
 ---
 
 ## 1. Routine update checklist
 
 ```bash
-# 1. Edit the page, the styles or the behaviour
-#    docs/index.html · docs/css/portfolio.css · docs/js/portfolio.js
+# 1. Change content  →  js/app.js   (the CONTENT constant)
+#    Change styling  →  css/portfolio.css
+#    Change layout   →  index.html
 
-# 2. Check it locally
-dotnet run
-#    → http://localhost:5277
+# 2. Check it — just open the file, no server required
+open index.html
 
 # 3. Commit and push — Pages republishes automatically
 git add -A
@@ -55,57 +60,83 @@ git commit -m "Describe the change"
 git push
 ```
 
-Nothing to regenerate. The file you edited is the file that goes live.
+No build, no export, no regeneration. What you edit is what goes live.
 
 ---
 
 ## 2. Local development
 
-### Prerequisites
-- [.NET SDK 10.0+](https://dotnet.microsoft.com/download) — verify with `dotnet --version`
+There are no prerequisites — no .NET, no Node, no npm.
 
-### Commands
-
-| Task | Command |
+| Task | How |
 |---|---|
-| Run | `dotnet run` |
-| Run on a different port | `dotnet run --urls http://localhost:5301` |
-| Build | `dotnet build` |
-| Release build (for a .NET host) | `dotnet publish -c Release -o ./publish` |
+| View the site | `open index.html` |
+| View over HTTP (closer to production) | `python3 -m http.server 8000` → <http://localhost:8000> |
+| Debug AngularJS | Browser devtools console; the app logs nothing by design |
 
-You can also open `docs/index.html` directly in a browser — it is a plain static
-page and needs no server. Running the app is only necessary to exercise the
-ASP.NET routing.
+Use the HTTP server rather than `file://` if you are testing anything
+URL-related; `file://` has stricter rules for some browser APIs.
 
 ---
 
 ## 3. Where to change what
 
-| I want to change… | File | Notes |
+| I want to change… | File | Where exactly |
 |---|---|---|
-| Any text, section, job, project | `docs/index.html` | One file, top to bottom |
-| Email / phone / profile URLs | `docs/index.html` | Search for `mailto:`, `linkedin`, `xing`, `github` |
-| Colours, fonts, spacing | `docs/css/portfolio.css` | Design tokens are in the `:root` block at the top |
-| Light-theme colours | `docs/css/portfolio.css` | The `[data-theme='light']` block |
-| Slider / modal / theme behaviour | `docs/js/portfolio.js` | One `init*()` function per feature |
-| Page title, meta, SEO, social preview | `docs/index.html` | `<head>` section |
-| Favicon | `docs/favicon.ico` | Replace the file |
-| Routing / startup | `Program.cs`, `Controllers/HomeController.cs` | |
-| CI checks | `.github/workflows/verify-static.yml` | Build + asset-reference check |
+| Name, role titles, summary, email, phone, profile links | `js/app.js` | `CONTENT.profile` |
+| The four "What I do" cards | `js/app.js` | `CONTENT.about` |
+| Proficiency bars and percentages | `js/app.js` | `CONTENT.proficiencies` |
+| Skill group cards and their tags | `js/app.js` | `CONTENT.skillGroups` |
+| Jobs, their bullet points and popup detail | `js/app.js` | `CONTENT.jobs` |
+| Projects, their descriptions and popup detail | `js/app.js` | `CONTENT.projects` |
+| Degrees, certifications, languages | `js/app.js` | `CONTENT.education`, `.certifications`, `.languages` |
+| Stat tiles (4+ years, 50+ tests…) | `js/app.js` | `CONTENT.stats` |
+| Colours, fonts, spacing | `css/portfolio.css` | the `:root` block at the top |
+| Light-theme colours | `css/portfolio.css` | the `[data-theme='light']` block |
+| Slider / popup / theme behaviour | `js/app.js` | the directives at the bottom |
+| Page title, meta, SEO, social preview | `index.html` | `<head>` |
+| Section order or overall layout | `index.html` | the `<section>` blocks |
+| Favicon | `favicon.ico` | replace the file |
 
-### Adding a new project card
+### Adding a project
 
-1. Copy an existing `<div class="slide">…</div>` block in the Projects section.
-2. Give its button a unique `data-modal="proj-yourname"`.
-3. Add a matching `<div id="proj-yourname">` in the **modal content sources**
-   block near the bottom of the file.
-4. Done — the slider recounts slides and rebuilds its dots automatically.
+Append an object to `CONTENT.projects` in `js/app.js`:
+
+```js
+{
+  icon: 'i-code',                       // any symbol id from the sprite
+  title: 'My new project',
+  context: 'Where it happened · year',
+  desc: 'One or two sentences for the card.',
+  tags: ['C#', 'Thing'],                // first tag is highlighted
+  sections: [                           // rendered in the popup
+    { heading: 'What I did', items: [
+      { text: 'A sentence.' },
+      { lead: 'Bold lead-in:', text: 'followed by detail.' }
+    ]}
+  ],
+  stack: ['C#', 'Thing', 'Another']
+}
+```
+
+No HTML to touch — the slider recounts slides and rebuilds its dots
+automatically, and the popup is generated from the same object.
+
+### Adding a job
+
+Same idea, in `CONTENT.jobs`. Use `details: [...]` (a flat list) instead of
+`sections`, and set `current: true` on the present role to get the amber dot.
 
 ### Adding an icon
 
-Icons are an inline SVG sprite (no icon font, no CDN). Add a `<symbol
-id="i-yourname" viewBox="0 0 24 24">` to the sprite at the top of the page, then
-use it anywhere:
+Icons are an inline SVG sprite — no icon font, no extra request. Add a symbol in
+`index.html`:
+
+```html
+<symbol id="i-yourname" viewBox="0 0 24 24"><path d="…"/></symbol>
+```
+
+Then reference it by id from data (`icon: 'i-yourname'`) or directly in markup:
 
 ```html
 <svg class="icon"><use href="#i-yourname"></use></svg>
@@ -121,13 +152,11 @@ Use `class="icon icon--solid"` for filled (brand) icons.
 
 1. Open **Settings → Pages**: <https://github.com/AdnanMansha64/Portfolio-Website/settings/pages>
 2. **Source:** `Deploy from a branch`
-3. **Branch:** `master` · **Folder:** **`/docs`** → **Save**
-   *(`/docs`, **not** `/ (root)` — the page lives in `docs/`)*
-4. Wait ~1 minute. The live URL appears in that panel:
+3. **Branch:** `master` · **Folder:** `/ (root)` → **Save**
+4. The live URL appears in that panel:
    `https://adnanmansha64.github.io/Portfolio-Website/`
 
-`docs/.nojekyll` tells Pages to serve the files as-is instead of running them
-through Jekyll.
+`.nojekyll` at the repository root stops Pages running the files through Jekyll.
 
 ### Every deploy after that
 
@@ -140,80 +169,72 @@ curl -s https://adnanmansha64.github.io/Portfolio-Website/ | grep -o '<title>[^<
 ```
 
 Expect `Adnan Mansha — Software Developer | C# / .NET`. If you get
-`Portfolio-Website`, Pages is rendering the README instead of the page — the
-publishing folder is still `/ (root)` and needs to be `/docs` (step 3).
+`Portfolio-Website`, Pages is rendering the README instead — check `index.html`
+is at the root of `master` and the folder setting is `/ (root)`.
+
+Note: `curl` only sees the un-rendered template, because AngularJS fills the
+page in the browser. To check the *content* is live, open the URL in a browser.
 
 Hard-refresh (<kbd>Cmd/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) if you still
-see the old page — Pages caches aggressively.
+see an old version — Pages caches aggressively.
 
 ---
 
-## 5. Hosting the real ASP.NET app (optional)
-
-Pages serves the page as a static file. To run the actual ASP.NET Core app —
-which is what you would need to add a working contact form, an API or a
-database — deploy it to a .NET host:
-
-| Option | Cost | Notes |
-|---|---|---|
-| Azure App Service | Free F1 tier available | `az webapp up --runtime "DOTNET:10"` — tightest .NET integration |
-| Render / Railway | Free tier | Point at the repo, build `dotnet publish -c Release` |
-| Fly.io | Free allowance | Needs a `Dockerfile` |
-| Any VPS | ~€4/mo | `dotnet publish` + nginx reverse proxy + systemd |
-
-Both setups can run side by side — they serve the same `docs/` directory.
-
----
-
-## 6. Troubleshooting
+## 5. Troubleshooting
 
 | Symptom | Cause / fix |
 |---|---|
-| Live site shows the repo file list / README | Pages publishing folder is `/ (root)`; it must be **`/docs`** (§4, step 3). |
-| Live site shows old content | Pages caches — hard-refresh. Check the [Actions](https://github.com/AdnanMansha64/Portfolio-Website/actions) run went green. |
-| Live site unstyled (plain text) | An asset path is wrong. The CI job lists every reference and fails on a miss; run `dotnet run` locally and check the browser console. |
-| `Failed to bind to address ... 5277: address already in use` | Another instance is running. `pkill -f "dotnet run"`, or `dotnet run --urls http://localhost:5301`. |
-| Run shows a "Hello World"/AngularJS page, or a **Home / Privacy** navbar | You are running a *different project*. See §8. |
-| Icons render as blank boxes | `<use href="#i-x">` has no matching `<symbol id="i-x">` in the sprite. |
-| Slider shows one card on desktop | Breakpoints live in `initSliders()` → `measure()` in `docs/js/portfolio.js`. |
-| Changed CSS, browser shows old | Hard-refresh. Static files are served without fingerprinting, so this is browser cache. |
-| `404` on `/css/portfolio.css` locally | The app's web root is `docs/` (set in `Program.cs`). The file must be at `docs/css/portfolio.css`. |
+| Page is blank, or shows raw `{{ }}` | AngularJS failed to load or the app threw. Open devtools → Console. A typo in `js/app.js` stops the whole app. |
+| Blank page offline | AngularJS is loaded from cdnjs, so the page needs a network connection on first load. |
+| One section is empty | Its array in `CONTENT` is empty or misnamed — the rest of the page keeps working. |
+| A new card does not appear | Check for a missing comma between objects in the array; the console will name the line. |
+| Icons render as blank boxes | The `icon:` value has no matching `<symbol id="…">` in the sprite. |
+| Live site shows the repo file list / README | No `index.html` at the root of `master`, or the Pages folder is not `/ (root)` (§4). |
+| Slider shows one card on desktop | Breakpoints live in `measure()` in `js/app.js` (1000px → 3 cards, 680px → 2). |
+| Changed CSS, browser shows old | Hard-refresh. Nothing is fingerprinted, so this is browser cache. |
+| Content missing from Google results | The page renders client-side; crawlers see the template. The `<head>` meta and the `<noscript>` block carry the key text. See §7. |
 
 ---
 
-## 7. Pre-publish checklist
+## 6. Pre-publish checklist
 
-- [ ] `dotnet build` → 0 warnings, 0 errors
-- [ ] Page reviewed at desktop **and** phone width (~390px)
+- [ ] Opened the page and seen every section render (no blank areas, no `{{ }}`)
+- [ ] Browser console clean — no AngularJS errors
+- [ ] Reviewed at desktop **and** phone width (~390px)
 - [ ] Light **and** dark theme both checked (toggle in the nav)
-- [ ] Every modal opens and closes (Esc, backdrop click, × button)
+- [ ] Every popup opens and closes (Esc, backdrop click, × button)
 - [ ] Slider arrows, dots, swipe and arrow keys all work
 - [ ] All external links open the right profile
-- [ ] Pushed to `master`; "Build & verify" green; live URL spot-checked
+- [ ] Pushed to `master`; live URL opened in a browser
+
+---
+
+## 7. Known trade-offs
+
+Recorded so they are a choice rather than a surprise:
+
+1. **AngularJS 1.x is end-of-life** (January 2022, no security patches). Fine for
+   a static page with no inputs; not something to build new work on. Moving off it
+   means either plain JavaScript (the page needs no framework) or a rewrite in
+   modern Angular, which requires Node and a build step.
+2. **Client-side rendering costs SEO.** The HTML a crawler downloads is a
+   template; the content arrives via JavaScript. Google executes JS but indexes
+   it less reliably. Mitigated by the static `<title>`/`<meta>`/Open Graph tags
+   and the `<noscript>` summary, both of which are in the raw HTML.
+3. **No backend.** A working contact form, an API or a database would need a host
+   that runs code — Azure, Render, Fly.io or a VPS. Pages serves static files only.
 
 ---
 
 ## 8. Not to be confused with
 
-There is an unrelated `~/HelloWorldMvcAngular/` folder on this machine: the stock
+There is an unrelated `~/HelloWorldMvcAngular/` folder on this machine: a stock
 `dotnet new mvc` scaffold plus a toy AngularJS controller. It is **not** this
 project — it is not a git repository, has no remote, and renders a
 `{{ hello.message }}` page with a **Home / Privacy** navbar.
 
-Both projects default to **port 5277**, so only one can run at a time, and
-running the wrong one looks like the portfolio "not working".
-
-Always confirm the first line of `dotnet run`:
-
-```
-Using launch settings from /…/Portfolio Website/Properties/launchSettings.json
-```
-
-If it says `HelloWorldMvcAngular`, you are in the wrong directory:
-
-```bash
-cd ~/Documents/A/Adnan/Git/Portfolio\ Website && dotnet run
-```
+This project no longer uses .NET at all, so there is nothing here to `dotnet
+run`. If you are running `dotnet`, you are in the wrong folder.
 
 ---
 
@@ -221,8 +242,8 @@ cd ~/Documents/A/Adnan/Git/Portfolio\ Website && dotnet run
 
 The GitHub **profile README** (the "Hi 👋 I'm Adnan Mansha" page on
 <https://github.com/AdnanMansha64>) lives in a separate special repository:
-<https://github.com/AdnanMansha64/AdnanMansha>. It is intentionally **not**
-part of this project — editing it here has no effect. Update it in its own
-repo, and keep the portfolio link in it pointing at the live Pages URL.
+<https://github.com/AdnanMansha64/AdnanMansha>. It is intentionally **not** part
+of this project — editing it here has no effect. Update it in its own repo, and
+keep the portfolio link in it pointing at the live Pages URL.
 
 See also: [README.md](README.md) for the project overview and architecture notes.

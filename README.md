@@ -2,12 +2,12 @@
 
 # Adnan Mansha — Portfolio
 
-**A single-page developer portfolio served by ASP.NET Core — no client-side framework, no CSS framework, no icon font, no build step.**
+**A data-driven single-page developer portfolio built with AngularJS — no build step, no backend, no CSS framework, no icon font.**
 
-[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET%20Core-MVC-5C2D91?logo=dotnet&logoColor=white)](https://learn.microsoft.com/aspnet/core/mvc/overview)
-[![C#](https://img.shields.io/badge/C%23-12-239120?logo=csharp&logoColor=white)](https://learn.microsoft.com/dotnet/csharp/)
-[![Vanilla JS](https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?logo=javascript&logoColor=black)](#)
+[![AngularJS](https://img.shields.io/badge/AngularJS-1.8.3-B52E31?logo=angularjs&logoColor=white)](https://angularjs.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES5-F7DF1E?logo=javascript&logoColor=black)](#)
+[![CSS](https://img.shields.io/badge/CSS-hand--written-1572B6?logo=css3&logoColor=white)](#)
+[![No build step](https://img.shields.io/badge/build%20step-none-4FB3E8)](#)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-live-222222?logo=githubpages&logoColor=white)](https://adnanmansha64.github.io/Portfolio-Website/)
 
 [**View live site**](https://adnanmansha64.github.io/Portfolio-Website/) ·
@@ -24,19 +24,44 @@
 The personal portfolio of **Adnan Mansha** — a software developer with 4+ years
 in C#, .NET, ASP.NET Core and WPF/MVVM, based in Erfurt, Germany.
 
-It is deliberately built the way a backend developer would build it: the entire
-page is **one HTML file**, every interaction is ~400 lines of dependency-free
-JavaScript, and the icons are an inline SVG sprite. **Zero npm packages, zero
-build step, zero runtime CDN dependencies** apart from the web fonts.
+The whole site is **four files and no toolchain**: an AngularJS template, one
+stylesheet, one app file, and a favicon. Clone it and double-click
+`index.html` — there is nothing to install, compile or serve.
+
+## How it works
+
+Every list on the page is **data, not markup**. Skills, jobs, projects,
+education and certifications are arrays in the `CONTENT` constant in
+[`js/app.js`](js/app.js), rendered with `ng-repeat`:
+
+```js
+CONTENT.projects = [
+  { icon: 'i-branch', title: 'TCP/IP communication layer refactor',
+    context: 'KLA Co. · production system',
+    desc: '…', tags: ['C#', 'TCP/IP'], sections: [ … ], stack: [ … ] },
+  …
+];
+```
+
+The markup describes **one** card of each kind and AngularJS repeats it. Two
+things fall out of that:
+
+- `index.html` is **28 KB instead of 69 KB** — the repetition is gone.
+- The detail popups duplicate **nothing**. A popup renders the same object as
+  the card that opened it, so a card and its popup can never disagree.
+
+Adding a project means appending one object to an array. No HTML to copy, no
+second place to update.
 
 ## Features
 
 | | |
 |---|---|
+| **Data-driven content** | Every section renders from arrays in `js/app.js` via `ng-repeat` |
 | **Theme switching** | Light/dark toggle, persisted in `localStorage`, defaults to the OS preference |
-| **Project slider** | Responsive carousel (3 → 2 → 1 cards), with arrows, dots, keyboard arrows and touch swipe |
-| **Detail popups** | 12 accessible modals — focus trap, `Esc` to close, backdrop click, focus restored on close |
-| **Scroll animations** | `IntersectionObserver` reveals, animated skill bars and counting stat tiles |
+| **Project slider** | Responsive carousel (3 → 2 → 1 cards) with arrows, dots, keyboard arrows and touch swipe |
+| **Detail popups** | Driven from the same data as the cards — focus trap, `Esc` to close, backdrop click, focus restored |
+| **Scroll animations** | `IntersectionObserver` reveals, animated proficiency bars, counting stat tiles |
 | **Typewriter hero** | Cycles through role titles with a blinking caret |
 | **Scroll spy** | Nav highlights the section you're reading |
 | **Copy to clipboard** | One tap copies email or phone, with a toast confirmation |
@@ -44,90 +69,95 @@ build step, zero runtime CDN dependencies** apart from the web fonts.
 | **Accessible** | Skip link, ARIA labels, keyboard-operable everything, visible focus rings |
 | **Respects preferences** | Honours `prefers-reduced-motion` and `prefers-color-scheme` |
 | **Print-friendly** | Dedicated print stylesheet — the page prints as a clean CV |
-| **SEO ready** | Descriptive meta tags, Open Graph and Twitter card data |
+| **SEO / sharing** | Static `<title>`, description, canonical and Open Graph tags, plus a `<noscript>` summary |
 
 ## Tech stack
 
-**Backend** · ASP.NET Core 10 · C# 12 · controller routing over a static web root
-**Frontend** · Hand-written CSS (custom properties, grid, flexbox) · Vanilla JavaScript (ES5 syntax, modern browser APIs) · Inline SVG sprite
-**Tooling** · .NET CLI only — no bundler, no npm, no generator
-**Hosting** · GitHub Pages (`/docs` folder) · any .NET host for the app itself
+**Framework** · AngularJS 1.8.3 (from cdnjs) — module, controller, constant, factory, 7 custom directives
+**Styling** · Hand-written CSS: custom properties, grid, flexbox, two themes
+**Icons** · Inline SVG sprite, 32 symbols in ~6 KB, styled with `currentColor`
+**Tooling** · None. No npm, no bundler, no transpiler, no generator.
+**Hosting** · GitHub Pages (branch `master`, folder `/ (root)`)
 
 ## Project structure
 
 ```
 Portfolio-Website/
-├── docs/                       # Web root AND the GitHub Pages publishing folder
-│   ├── index.html              #   THE page — the only copy (edit this)
-│   ├── css/portfolio.css       #   Design system + all components
-│   ├── js/portfolio.js         #   Theme, slider, modals, reveals, counters
-│   ├── favicon.ico
-│   └── .nojekyll               #   Serve files as-is, skip Jekyll
-├── Controllers/
-│   └── HomeController.cs       # The single controller — returns docs/index.html
+├── index.html              # AngularJS template + SVG icon sprite (~28 KB)
+├── css/
+│   └── portfolio.css       # Design system, components, both themes, print
+├── js/
+│   └── app.js              # The app: ALL page content + 7 directives
+├── favicon.ico
+├── .nojekyll               # Serve files as-is, skip Jekyll
 ├── .github/workflows/
-│   └── verify-static.yml       # Build + checks every asset reference resolves
-├── Program.cs                  # Minimal startup — web root = docs/, static files
-├── PortfolioWebsite.csproj
-├── SETUP.md                    # Setup, maintenance and deployment guide
+│   └── verify-static.yml   # Checks every asset reference resolves
+├── SETUP.md                # Setup, maintenance and deployment guide
 └── README.md
 ```
 
-**One page, one copy.** `docs/index.html` is served two ways — by this app
-(`Program.cs` sets the web root to `docs/`) and by GitHub Pages (whose publishing
-folder is `/docs`). The file you edit is byte-for-byte the file that goes live,
-so there is nothing to regenerate and nothing that can drift out of sync.
+One HTML file. One stylesheet. One script. Nothing generated, nothing to sync.
 
 ## Quick start
 
 ```bash
 git clone https://github.com/AdnanMansha64/Portfolio-Website.git
 cd Portfolio-Website
-dotnet run
+open index.html
 ```
 
-Then open <http://localhost:5277> (the port is set in
-`Properties/launchSettings.json`).
+That's it — no dependencies to install. To serve it over HTTP instead
+(closer to production):
 
-Since the page is plain static HTML, you can also just open `docs/index.html`
-in a browser — no server needed.
-
-> **Requires** the [.NET SDK 10.0+](https://dotnet.microsoft.com/download).
+```bash
+python3 -m http.server 8000   # → http://localhost:8000
+```
 
 ## Updating the site
 
-Edit `docs/index.html`, commit, push. Pages republishes automatically:
+Edit the content array, commit, push. Pages republishes automatically:
 
 ```bash
+# content → js/app.js   ·   styling → css/portfolio.css   ·   layout → index.html
 git add -A && git commit -m "…" && git push
 ```
 
-There is no export or build step to remember.
-
-Full details — including where to change what, how to add a project card, and
-deployment options — are in **[SETUP.md](SETUP.md)**.
+Where to change what, how to add a project or an icon, and the deployment
+details are all in **[SETUP.md](SETUP.md)**.
 
 ## Architecture notes
 
-A few decisions worth explaining, since they're deliberate rather than accidental:
+Decisions that are deliberate rather than accidental:
 
-- **One file, served two ways.** GitHub Pages cannot execute Razor, so a
-  server-rendered view would have to be mirrored into a committed static copy —
-  two copies of the same page that drift apart. Publishing from `/docs` and
-  pointing the app's web root at the same directory removes the duplicate
-  entirely. The trade-off is deliberate: no Razor templating, just HTML.
-- **Inline SVG sprite over an icon font.** 32 icons in ~6 KB of markup, styled
-  with `currentColor` and crisp at any size — versus a ~100 KB external
+- **Content as data, markup as template.** The earlier version of this page
+  repeated the same card markup dozens of times and kept a second hidden copy of
+  every detail block for the popups. Moving content into `CONTENT` and looping
+  with `ng-repeat` deleted both kinds of duplication and more than halved the HTML.
+- **One directive per concern.** Reveal-on-scroll, typewriter, count-up,
+  proficiency bar, scroll-spy, swipe and focus-trap are seven small directives
+  rather than one controller doing DOM work. Each is independently testable and
+  independently removable.
+- **Inline SVG sprite over an icon font.** 32 icons in ~6 KB of markup, crisp at
+  any size and themeable via `currentColor` — versus a ~100 KB external
   stylesheet plus font files and a flash of invisible icons.
-- **No CSS/JS framework.** The page needs a design system, a carousel and a
-  modal. All three are a few hundred lines each, and writing them keeps the
-  payload tiny and the behaviour exactly as intended.
+- **No build step, on purpose.** The site has no transpiler, bundler or package
+  manager, so it cannot break from a dependency update and needs no `node_modules`
+  to work on. `git clone` and open the file.
 - **Dark theme is the default.** Light theme overrides a single `[data-theme]`
   block, so there is exactly one place to keep the two palettes in sync.
-- **ES5 syntax, modern APIs.** The JavaScript avoids transpilation entirely —
-  no build step, no bundler — but it does rely on `IntersectionObserver`,
-  `navigator.clipboard` and `matchMedia`, so it targets current browsers rather
-  than old ones. Each feature is wrapped so one failure can't break the page.
+- **ES5 syntax, modern APIs.** No transpilation anywhere, but the code does use
+  `IntersectionObserver`, `navigator.clipboard` and `matchMedia`, so it targets
+  current browsers rather than old ones.
+
+### Trade-offs
+
+Honest about the costs, which are documented in [SETUP.md §7](SETUP.md):
+
+- **AngularJS 1.x is end-of-life** (January 2022, no security patches). Acceptable
+  for a static page with no user input or authentication, but a dead framework.
+- **Client-side rendering costs SEO.** Crawlers download a template, not the
+  content. Mitigated by static meta tags and a `<noscript>` summary.
+- **No backend.** A working contact form or API would need a host that runs code.
 
 ## Contact
 
