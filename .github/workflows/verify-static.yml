@@ -1,13 +1,9 @@
-name: Verify static export
+name: Build & verify
 
-# GitHub Pages serves the committed index.html from master / (root), but that file
-# is generated from Views/Home/Index.cshtml. If someone edits the view and forgets
-# to re-run ./export-static.sh, the repository and the live site silently disagree.
-#
-# This job re-renders the view and fails if the committed index.html differs, so
-# the drift is caught in the pull request instead of on the live site.
-#
-# There is no deploy job: Pages publishes master / (root) directly.
+# There is nothing to generate any more: docs/index.html is the single copy of
+# the page, served both by this app (web root = docs) and by GitHub Pages
+# (publishing folder = /docs). So CI just checks the project builds and that the
+# published page still references assets that exist.
 
 on:
   push:
@@ -28,15 +24,22 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Re-render the view
-        run: OUT=/tmp/fresh-index.html ./export-static.sh
+      - name: Build
+        run: dotnet build --nologo --warnaserror
 
-      - name: Compare against the committed index.html
+      - name: Check every local asset the page references exists
         run: |
-          if diff -u index.html /tmp/fresh-index.html; then
-            echo "index.html is up to date with Views/Home/Index.cshtml"
-          else
-            echo
-            echo "::error::index.html is stale. Run ./export-static.sh and commit the result."
-            exit 1
-          fi
+          python3 - <<'PY'
+          import os, re, sys
+
+          html = open('docs/index.html', encoding='utf-8').read()
+          refs = sorted(set(re.findall(
+              r'(?:href|src)="((?!https?:|mailto:|tel:|#|data:)[^"]+)"', html)))
+
+          missing = [r for r in refs if not os.path.isfile(os.path.join('docs', r.split('?')[0]))]
+          for r in refs:
+              print(('ok   ' if r not in missing else 'MISS ') + r)
+          if missing:
+              print(f"::error::docs/index.html references missing files: {missing}")
+              sys.exit(1)
+          PY

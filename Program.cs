@@ -1,15 +1,22 @@
-var builder = WebApplication.CreateBuilder(args);
+// The site lives in docs/ rather than wwwroot/ so that ONE index.html serves
+// both delivery paths: this app (web root = docs) and GitHub Pages (publishing
+// folder = /docs). Asset URLs inside the page are relative, so they resolve
+// identically either way.
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = "docs"
+});
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// MapStaticAssets fingerprints and pre-compresses wwwroot assets at build time.
-app.MapStaticAssets();
+// Serves docs/css, docs/js and docs/favicon.ico.
+app.UseStaticFiles();
 
 app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

@@ -2,7 +2,7 @@
 
 # Adnan Mansha — Portfolio
 
-**A single-page developer portfolio built with ASP.NET Core MVC — no client-side framework, no CSS framework, no icon font.**
+**A single-page developer portfolio served by ASP.NET Core — no client-side framework, no CSS framework, no icon font, no build step.**
 
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET%20Core-MVC-5C2D91?logo=dotnet&logoColor=white)](https://learn.microsoft.com/aspnet/core/mvc/overview)
@@ -24,10 +24,10 @@
 The personal portfolio of **Adnan Mansha** — a software developer with 4+ years
 in C#, .NET, ASP.NET Core and WPF/MVVM, based in Erfurt, Germany.
 
-It is deliberately built the way a backend developer would build it: the whole
-page is server-rendered from one Razor view, every interaction is ~400 lines of
-dependency-free JavaScript, and the icons are an inline SVG sprite. **Zero npm
-packages, zero runtime CDN dependencies** apart from the web fonts.
+It is deliberately built the way a backend developer would build it: the entire
+page is **one HTML file**, every interaction is ~400 lines of dependency-free
+JavaScript, and the icons are an inline SVG sprite. **Zero npm packages, zero
+build step, zero runtime CDN dependencies** apart from the web fonts.
 
 ## Features
 
@@ -48,40 +48,35 @@ packages, zero runtime CDN dependencies** apart from the web fonts.
 
 ## Tech stack
 
-**Backend** · ASP.NET Core MVC 10 · C# 12 · Razor
+**Backend** · ASP.NET Core 10 · C# 12 · controller routing over a static web root
 **Frontend** · Hand-written CSS (custom properties, grid, flexbox) · Vanilla JavaScript (ES5 syntax, modern browser APIs) · Inline SVG sprite
-**Tooling** · .NET CLI · `MapStaticAssets` (build-time fingerprinting + compression) · Bash/Python static exporter
-**Hosting** · GitHub Pages (static snapshot) · any .NET host for the live app
+**Tooling** · .NET CLI only — no bundler, no npm, no generator
+**Hosting** · GitHub Pages (`/docs` folder) · any .NET host for the app itself
 
 ## Project structure
 
 ```
 Portfolio-Website/
+├── docs/                       # Web root AND the GitHub Pages publishing folder
+│   ├── index.html              #   THE page — the only copy (edit this)
+│   ├── css/portfolio.css       #   Design system + all components
+│   ├── js/portfolio.js         #   Theme, slider, modals, reveals, counters
+│   ├── favicon.ico
+│   └── .nojekyll               #   Serve files as-is, skip Jekyll
 ├── Controllers/
-│   └── HomeController.cs       # The single controller — one Index action
-├── Views/
-│   ├── Home/
-│   │   └── Index.cshtml        # The single view — entire page + icon sprite + modal content
-│   └── _ViewImports.cshtml     # Tag helper registration
-├── wwwroot/
-│   ├── css/portfolio.css       # Design system + all components
-│   ├── js/portfolio.js         # Theme, slider, modals, reveals, counters
-│   └── favicon.ico
+│   └── HomeController.cs       # The single controller — returns docs/index.html
 ├── .github/workflows/
-│   └── verify-static.yml       # Fails CI if index.html is stale vs the view
-├── Program.cs                  # Minimal startup — MVC + static assets
+│   └── verify-static.yml       # Build + checks every asset reference resolves
+├── Program.cs                  # Minimal startup — web root = docs/, static files
 ├── PortfolioWebsite.csproj
-├── export-static.sh            # Renders the view → index.html
-├── index.html                  # GENERATED snapshot served by Pages (do not edit)
-├── .nojekyll                   # Tells Pages to serve files as-is
 ├── SETUP.md                    # Setup, maintenance and deployment guide
 └── README.md
 ```
 
-`Views/Home/Index.cshtml` is the source of the page; `index.html` is a generated
-snapshot of it, committed because GitHub Pages serves the repository directly.
-The snapshot points at `wwwroot/css` and `wwwroot/js` rather than duplicating
-them, and CI fails if it drifts out of sync with the view.
+**One page, one copy.** `docs/index.html` is served two ways — by this app
+(`Program.cs` sets the web root to `docs/`) and by GitHub Pages (whose publishing
+folder is `/docs`). The file you edit is byte-for-byte the file that goes live,
+so there is nothing to regenerate and nothing that can drift out of sync.
 
 ## Quick start
 
@@ -94,21 +89,20 @@ dotnet run
 Then open <http://localhost:5277> (the port is set in
 `Properties/launchSettings.json`).
 
-For hot reload while editing, use `dotnet watch` instead.
+Since the page is plain static HTML, you can also just open `docs/index.html`
+in a browser — no server needed.
 
 > **Requires** the [.NET SDK 10.0+](https://dotnet.microsoft.com/download).
 
 ## Updating the site
 
-Edit the view, regenerate the static snapshot, commit both:
+Edit `docs/index.html`, commit, push. Pages republishes automatically:
 
 ```bash
-./export-static.sh
 git add -A && git commit -m "…" && git push
 ```
 
-Skipping the export leaves the live site on the old page — the `verify-static`
-check goes red on the next push to catch exactly that.
+There is no export or build step to remember.
 
 Full details — including where to change what, how to add a project card, and
 deployment options — are in **[SETUP.md](SETUP.md)**.
@@ -117,22 +111,17 @@ deployment options — are in **[SETUP.md](SETUP.md)**.
 
 A few decisions worth explaining, since they're deliberate rather than accidental:
 
-- **One view, one controller.** The portfolio is a single page of static
-  presentational content. Splitting it into partials or a view-model layer would
-  add indirection without removing any duplication.
+- **One file, served two ways.** GitHub Pages cannot execute Razor, so a
+  server-rendered view would have to be mirrored into a committed static copy —
+  two copies of the same page that drift apart. Publishing from `/docs` and
+  pointing the app's web root at the same directory removes the duplicate
+  entirely. The trade-off is deliberate: no Razor templating, just HTML.
 - **Inline SVG sprite over an icon font.** 32 icons in ~6 KB of markup, styled
   with `currentColor` and crisp at any size — versus a ~100 KB external
   stylesheet plus font files and a flash of invisible icons.
 - **No CSS/JS framework.** The page needs a design system, a carousel and a
   modal. All three are a few hundred lines each, and writing them keeps the
   payload tiny and the behaviour exactly as intended.
-- **One generated file, guarded by CI.** GitHub Pages can't run ASP.NET Core, so a
-  static `index.html` has to be committed for the site to exist. That is a second
-  copy of the page, and the hazard is obvious: edit the view, forget the export,
-  and the repo and the live site disagree. Rather than rely on discipline, the
-  `verify-static` workflow re-renders the view on every push and fails if the
-  committed file differs. The CSS and JS are not duplicated — the snapshot points
-  at the same `wwwroot/` files the app serves.
 - **Dark theme is the default.** Light theme overrides a single `[data-theme]`
   block, so there is exactly one place to keep the two palettes in sync.
 - **ES5 syntax, modern APIs.** The JavaScript avoids transpilation entirely —
