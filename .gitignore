@@ -9,8 +9,10 @@ _site/
 
 ## IDE
 .vs/
-.vscode/
 .idea/
+# Keep the shared editor config (it hides the generated _site/), ignore the rest.
+.vscode/*
+!.vscode/settings.json
 
 ## OS
 .DS_Store
