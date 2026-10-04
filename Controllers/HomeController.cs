@@ -1,19 +1,12 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using PortfolioWebsite.Models;
 
 namespace PortfolioWebsite.Controllers;
 
+/// <summary>
+/// The only controller in the app: the portfolio is a single server-rendered page,
+/// so <see cref="Index"/> is the one action and Views/Home/Index.cshtml the one view.
+/// </summary>
 public class HomeController : Controller
 {
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    public IActionResult Index() => View();
 }
