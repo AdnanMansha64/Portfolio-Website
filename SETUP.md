@@ -12,7 +12,8 @@ Operational handbook for this repository. Read the section you need — the
 
 ## 0. How this project is wired
 
-There is exactly **one** copy of the page, and it is the Razor view:
+The Razor view is the **source** of the page. The `index.html` at the repository
+root is **generated** from it — two files, one of which you never edit by hand:
 
 ```
 Views/Home/Index.cshtml     ← THE page (edit this)
@@ -62,8 +63,8 @@ git push
 ```
 
 > **Step 3 is not optional.** Skip it and the live site keeps showing the old
-> page while the repo shows the new one. CI will fail the push to tell you, but
-> it is quicker to just run the script.
+> page while the repo shows the new one. The CI check will go red on the next
+> push to tell you, but it is quicker to just run the script.
 
 ## 2. Local development
 
@@ -94,12 +95,12 @@ a green run means Pages will not 404.
 |---|---|---|
 | Any text, section, job, project | `Views/Home/Index.cshtml` | Single view, top to bottom |
 | Email / phone / profile URLs | `Views/Home/Index.cshtml` | The `const string` block at the very top — change once, used everywhere |
-| Colours, fonts, spacing | `wwwroot/css/portfolio.css` | Design tokens are in the `:root` block (§1) |
+| Colours, fonts, spacing | `wwwroot/css/portfolio.css` | Design tokens are in the `:root` block at the top of that file |
 | Light-theme colours | `wwwroot/css/portfolio.css` | The `[data-theme='light']` block |
 | Slider / modal / theme behaviour | `wwwroot/js/portfolio.js` | One `init*()` function per feature |
 | Page title, meta, SEO, social preview | `Views/Home/Index.cshtml` | `<head>` section |
 | Favicon | `wwwroot/favicon.ico` | Replace the file |
-| Deployment steps | `.github/workflows/deploy-pages.yml` | |
+| CI / staleness check | `.github/workflows/verify-static.yml` | There is no deploy job — Pages serves `master` / `(root)` directly |
 
 ### Adding a new project card
 
@@ -176,7 +177,7 @@ and `.nojekyll`, so both setups can run side by side.
 
 | Symptom | Cause / fix |
 |---|---|
-| Live site shows old content | Check the [Actions](https://github.com/AdnanMansha64/Portfolio-Website/actions) run — a failed deploy leaves the previous version up. Then hard-refresh. |
+| Live site shows old content | `index.html` was not regenerated before the push (§1, step 3), or Pages is still serving a cached copy — hard-refresh. |
 | Live site shows the repo file list / README | No `index.html` at the root of `master`, so Pages fell back to Jekyll. Run `./export-static.sh` and commit it. |
 | CI fails: "index.html is stale" | You changed the view/CSS/JS without re-exporting. Run `./export-static.sh`, commit, push. |
 | Live site unstyled (plain text) | An asset path didn't resolve. `./export-static.sh` locally — it lists every reference and exits non-zero on a miss. |
@@ -184,8 +185,10 @@ and `.nojekyll`, so both setups can run side by side.
 | `./export-static.sh: Permission denied` | `chmod +x export-static.sh` |
 | Razor error around `@` | Literal `@` must be escaped as `@@` in `.cshtml` (e.g. email addresses). |
 | Icons render as blank boxes | `<use href="#i-x">` has no matching `<symbol id="i-x">` in the sprite. |
-| Slider shows one card on desktop | Breakpoints live in `initSliders()` → `measure()` in `portfolio.js`. |
+| Slider shows one card on desktop | Breakpoints live in `initSliders()` → `measure()` in `wwwroot/js/portfolio.js`. |
 | Changed CSS, browser shows old | Dev: hard-refresh. The MVC app fingerprints assets, so this is browser cache only. |
+| `Failed to bind to address ... 5277: address already in use` | Another instance is already running. `pkill -f "dotnet run"`, or use a different port: `dotnet run --urls http://localhost:5301`. |
+| Run shows a "Hello World"/AngularJS page, or a **Home / Privacy** navbar | You are running a *different project*. Check the first line of `dotnet run` output: it must say `launch settings from …/Portfolio Website/Properties/launchSettings.json`. See §9. |
 | Edited `index.html` and the change vanished | It is generated and overwritten on every export. Edit `Views/Home/Index.cshtml` instead. |
 
 ---
@@ -210,3 +213,29 @@ The GitHub **profile README** (the "Hi 👋 I'm Adnan Mansha" page on
 <https://github.com/AdnanMansha64/AdnanMansha>. It is intentionally **not**
 part of this project — editing it here has no effect. Update it in its own
 repo, and keep the portfolio link in it pointing at the live Pages URL.
+
+---
+
+## 9. Not to be confused with
+
+There is an unrelated `~/HelloWorldMvcAngular/` folder on this machine: the stock
+`dotnet new mvc` scaffold plus a toy AngularJS controller. It is **not** this
+project — it is not a git repository, has no remote, and renders a
+`{{ hello.message }}` page with a **Home / Privacy** navbar.
+
+Both projects default to **port 5277**, so only one can run at a time, and
+running the wrong one looks like the portfolio "not working".
+
+Always confirm the first line of `dotnet run`:
+
+```
+Using launch settings from /…/Portfolio Website/Properties/launchSettings.json
+```
+
+If it says `HelloWorldMvcAngular`, you are in the wrong directory:
+
+```bash
+cd ~/Documents/A/Adnan/Git/Portfolio\ Website && dotnet watch
+```
+
+See also: [README.md](README.md) for the project overview and architecture notes.
