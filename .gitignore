@@ -4,6 +4,9 @@ obj/
 *.user
 *.suo
 
+## Generated static site (built by ./export-static.sh, published by CI)
+_site/
+
 ## IDE
 .vs/
 .vscode/
