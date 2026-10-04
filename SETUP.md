@@ -15,24 +15,31 @@ Operational handbook for this repository. Read the section you need — the
 There is exactly **one** copy of the page, and it is the Razor view:
 
 ```
-Views/Home/Index.cshtml     ← THE page (edit this)
-wwwroot/css/portfolio.css   ← all styling (edit this)
-wwwroot/js/portfolio.js     ← all behaviour (edit this)
+master branch                          ← the source you edit
+  Views/Home/Index.cshtml              ← THE page (the only copy)
+  wwwroot/css/portfolio.css            ← all styling
+  wwwroot/js/portfolio.js              ← all behaviour
         │
         │   ./export-static.sh — renders the view through the real app,
         │   rewrites asset URLs, copies wwwroot
         ▼
-_site/                      ← build output: gitignored, never committed
+  _site/                               ← build output: gitignored, never committed
         │
-        │   .github/workflows/deploy-pages.yml (runs on every push to master)
+        │   .github/workflows/deploy-pages.yml (on every push to master)
         ▼
-GitHub Pages                ← the live site
+gh-pages branch                        ← generated HTML only, force-pushed by CI
+        │
+        ▼
+GitHub Pages ("Deploy from a branch")  ← the live site
 ```
 
 **Why a build step.** GitHub Pages only serves static files — it cannot execute
-ASP.NET Core. Rather than keep a second hand-maintained HTML copy in the repo
-(which drifts out of sync the moment you forget to update it), CI renders the
-view and publishes the result. The repository stays single-source.
+ASP.NET Core. Rather than keep a second hand-maintained HTML copy next to its
+own source (which goes stale the moment you forget to regenerate it), CI renders
+the view and force-pushes the result to `gh-pages`.
+
+So `master` holds exactly one copy of the page, and the generated HTML lives on
+its own branch. **Never edit `gh-pages`** — every deploy overwrites it.
 
 ---
 
@@ -124,12 +131,17 @@ Use `class="icon icon--solid"` for filled (brand) icons.
 
 ### One-time setup
 
-1. Open **Settings → Pages**: <https://github.com/AdnanMansha64/Portfolio-Website/settings/pages>
-2. Under **Build and deployment → Source**, select **GitHub Actions**
-   *(not "Deploy from a branch" — the site is built by the workflow)*
-3. Push to `master`, or trigger **Deploy to GitHub Pages** manually from the
-   Actions tab.
-4. The live URL appears in the workflow run and in the Pages settings panel:
+Order matters — the `gh-pages` branch has to exist before Pages can point at it.
+
+1. **Push `master` first** (or run **Deploy to GitHub Pages** from the
+   [Actions tab](https://github.com/AdnanMansha64/Portfolio-Website/actions)).
+   The workflow creates the `gh-pages` branch.
+2. Open **Settings → Pages**: <https://github.com/AdnanMansha64/Portfolio-Website/settings/pages>
+3. Under **Build and deployment → Source**, select **Deploy from a branch**
+4. **Branch:** `gh-pages` · **Folder:** `/ (root)` → **Save**
+   *(`gh-pages`, not `master` — master holds the Razor source, which Pages
+   cannot render)*
+5. Wait ~1 minute. The live URL appears in that panel:
    `https://adnanmansha64.github.io/Portfolio-Website/`
 
 ### Every deploy after that
@@ -170,7 +182,9 @@ workflow, so both setups can run side by side.
 | Symptom | Cause / fix |
 |---|---|
 | Live site shows old content | Check the [Actions](https://github.com/AdnanMansha64/Portfolio-Website/actions) run — a failed deploy leaves the previous version up. Then hard-refresh. |
-| Deploy fails: "Pages site not found" | Pages **Source** isn't set to **GitHub Actions** (§4). |
+| Live site shows the repo file list / README | Pages is pointed at `master` instead of `gh-pages` (§4, step 4). |
+| Pages settings offers no `gh-pages` branch | The workflow hasn't run yet — push to `master` first, then set the branch (§4, step 1). |
+| Deploy fails: `permission denied` on push | The workflow needs `permissions: contents: write`, and **Settings → Actions → General → Workflow permissions** must be *Read and write*. |
 | Live site unstyled (plain text) | An asset path didn't resolve. `./export-static.sh` locally — it lists every reference and exits non-zero on a miss. |
 | `export-static.sh` hangs on "Waiting for app" | Port busy. `PORT=5400 ./export-static.sh`, or read `/tmp/export-static.log`. |
 | `./export-static.sh: Permission denied` | `chmod +x export-static.sh` |

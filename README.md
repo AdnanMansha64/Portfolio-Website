@@ -68,7 +68,7 @@ Portfolio-Website/
 │   ├── js/portfolio.js         # Theme, slider, modals, reveals, counters
 │   └── favicon.ico
 ├── .github/workflows/
-│   └── deploy-pages.yml        # Renders the view and publishes to GitHub Pages
+│   └── deploy-pages.yml        # Renders the view, force-pushes it to gh-pages
 ├── Program.cs                  # Minimal startup — MVC + static assets
 ├── PortfolioWebsite.csproj
 ├── export-static.sh            # Renders the view → _site/ (gitignored build output)
@@ -76,9 +76,10 @@ Portfolio-Website/
 └── README.md
 ```
 
-There is no second copy of the page. `Views/Home/Index.cshtml` is the only one;
-the static HTML that GitHub Pages serves is generated at deploy time into
-`_site/`, which is gitignored.
+**`master` contains exactly one copy of the page** — `Views/Home/Index.cshtml`.
+The static HTML that GitHub Pages serves is generated at deploy time and
+force-pushed to the `gh-pages` branch, so the generated output never sits next
+to the source it was generated from.
 
 ## Quick start
 
@@ -125,11 +126,12 @@ A few decisions worth explaining, since they're deliberate rather than accidenta
 - **No CSS/JS framework.** The page needs a design system, a carousel and a
   modal. All three are a few hundred lines each, and writing them keeps the
   payload tiny and the behaviour exactly as intended.
-- **The page exists once.** GitHub Pages can't run ASP.NET Core, so a static
-  render is required — but keeping that render in the repo means two copies of
-  the same page, and the committed one goes stale the first time someone forgets
-  to regenerate it. Instead CI renders the view on every push and publishes the
-  output, so the Razor view is the only copy under version control.
+- **The page exists once on `master`.** GitHub Pages can't run ASP.NET Core, so a
+  static render is required — but keeping that render beside its own source means
+  two copies of the same page, and the committed one goes stale the first time
+  someone forgets to regenerate it. Instead CI renders the view on every push and
+  force-pushes the output to `gh-pages`, which Pages serves. Generated artifacts
+  live on a generated branch.
 - **Dark theme is the default.** Light theme overrides a single `[data-theme]`
   block, so there is exactly one place to keep the two palettes in sync.
 

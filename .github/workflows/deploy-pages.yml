@@ -1,18 +1,21 @@
 name: Deploy to GitHub Pages
 
-# Renders Views/Home/Index.cshtml through the ASP.NET Core app and publishes the
-# resulting static site. Keeps the repository down to a single copy of the page:
-# the Razor view is the source, the HTML Pages serves is a build artifact.
+# Renders Views/Home/Index.cshtml through the ASP.NET Core app and pushes the
+# resulting static site to the gh-pages branch, which GitHub Pages serves via
+# "Deploy from a branch".
+#
+# This keeps master single-source: the Razor view is the only copy of the page,
+# and the generated HTML lives on its own branch instead of being committed
+# alongside its own source.
 
 on:
   push:
     branches: [master]
   workflow_dispatch:
 
+# Needed to push the generated site to the gh-pages branch.
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 # Let a newer deploy supersede an in-flight one, but never cancel it halfway.
 concurrency:
@@ -20,7 +23,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,18 +35,17 @@ jobs:
       - name: Render static site
         run: ./export-static.sh
 
-      - uses: actions/configure-pages@v5
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Push to gh-pages
+        working-directory: _site
+        run: |
+          set -euo pipefail
+          # gh-pages holds generated output only, so each deploy is a single
+          # fresh commit — there is no history worth preserving on it.
+          git init -q -b gh-pages
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Deploy ${GITHUB_SHA:0:7} from ${GITHUB_REF_NAME}"
+          git push -f \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" \
+            gh-pages
