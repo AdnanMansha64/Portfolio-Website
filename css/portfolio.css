@@ -687,6 +687,27 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .cert-name { font-size: 0.95rem; font-weight: 500; margin-bottom: 3px; }
 .cert-src { font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-faint); }
 
+/* Status pill for a certification that is not yet earned (In Progress / Planned). */
+.cert-status {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  white-space: nowrap;
+  vertical-align: 2px;
+  color: var(--text-faint);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.cert-status--active {
+  color: var(--amber);
+  background: var(--amber-soft);
+  border-color: color-mix(in srgb, var(--amber) 35%, transparent);
+}
+
 /* ---------- 10. MODAL / POPUP ---------- */
 .modal {
   position: fixed;

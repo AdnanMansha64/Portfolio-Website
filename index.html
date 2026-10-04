@@ -159,24 +159,25 @@
         <div class="code-card">
           <div class="code-head">
             <span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
-            <span class="code-file">app.js</span>
+            <span class="code-file">Developer.cs</span>
           </div>
-<pre><code><span class="tok-cmt">// this page is an AngularJS app</span>
-angular.module(<span class="tok-str">'portfolio'</span>, [])
-  .controller(<span class="tok-str">'PortfolioController'</span>, [
-    <span class="tok-str">'CONTENT'</span>, <span class="tok-key">function</span> (<span class="tok-type">CONTENT</span>) {
-      <span class="tok-key">var</span> vm = <span class="tok-key">this</span>;
+<pre><code><span class="tok-key">public sealed class</span> <span class="tok-type">Developer</span>
+{
+    <span class="tok-key">public string</span> Name  =&gt; <span class="tok-str">"Adnan Mansha"</span>;
+    <span class="tok-key">public string</span> Focus =&gt; <span class="tok-str">"C# / .NET"</span>;
 
-      vm.name  = <span class="tok-str">'Adnan Mansha'</span>;
-      vm.focus = <span class="tok-str">'C# / .NET'</span>;
-      vm.stack = [
-        <span class="tok-str">'ASP.NET Core MVC'</span>,
-        <span class="tok-str">'WPF + MVVM'</span>,
-        <span class="tok-str">'REST APIs'</span>,
-        <span class="tok-str">'TCP/IP + async'</span>
-      ];
-    }
-  ]);</code></pre>
+    <span class="tok-cmt">// what I reach for most</span>
+    <span class="tok-key">public string</span>[] Stack =&gt;
+    [
+        <span class="tok-str">"ASP.NET Core MVC"</span>,
+        <span class="tok-str">"WPF + MVVM"</span>,
+        <span class="tok-str">"REST APIs"</span>,
+        <span class="tok-str">"TCP/IP + async"</span>
+    ];
+
+    <span class="tok-key">public async</span> <span class="tok-type">Task</span>&lt;<span class="tok-type">Result</span>&gt; BuildAsync() =&gt;
+        <span class="tok-key">await</span> Ship(tested: <span class="tok-key">true</span>);
+}</code></pre>
         </div>
 
         <div class="stats">
@@ -375,7 +376,11 @@ angular.module(<span class="tok-str">'portfolio'</span>, [])
         <article class="card cert" ng-repeat="c in vm.certifications" am-reveal="{{ $index * 80 }}">
           <div class="card-icon"><svg class="icon"><use href="#i-award"></use></svg></div>
           <div>
-            <p class="cert-name">{{ c.name }}</p>
+            <p class="cert-name">
+              {{ c.name }}
+              <span class="cert-status" ng-if="c.status"
+                    ng-class="{'cert-status--active': c.status === 'In Progress'}">{{ c.status }}</span>
+            </p>
             <span class="cert-src">{{ c.source }}</span>
           </div>
         </article>
@@ -443,7 +448,7 @@ angular.module(<span class="tok-str">'portfolio'</span>, [])
               <span class="card-icon"><svg class="icon icon--solid"><use href="#i-linkedin"></use></svg></span>
               <span>
                 <span class="contact-label">LinkedIn</span>
-                <span class="contact-value">in/adnan-mansha-278a46108</span>
+                <span class="contact-value">Adnan Mansha</span>
               </span>
               <svg class="icon copy" style="color:var(--text-faint)"><use href="#i-external"></use></svg>
             </a>
@@ -453,7 +458,7 @@ angular.module(<span class="tok-str">'portfolio'</span>, [])
               <span class="card-icon"><svg class="icon icon--solid"><use href="#i-xing"></use></svg></span>
               <span>
                 <span class="contact-label">Xing</span>
-                <span class="contact-value">profile/Adnan_Mansha</span>
+                <span class="contact-value">Adnan Mansha</span>
               </span>
               <svg class="icon copy" style="color:var(--text-faint)"><use href="#i-external"></use></svg>
             </a>

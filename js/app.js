@@ -341,9 +341,14 @@
         school: 'International Islamic University', place: 'Islamabad, Pakistan' }
     ],
 
+    // `status` marks a certification that is not yet earned, so the page never
+    // implies a credential that has not been awarded.
     certifications: [
       { name: 'C# Essential Training 1: Types and Control Flow', source: 'LinkedIn Learning · 2024' },
-      { name: 'Advanced C#: LINQ, Dynamic Types, Extension Methods & Tuples', source: 'LinkedIn Learning · 2024' }
+      { name: 'Advanced C#: LINQ, Dynamic Types, Extension Methods & Tuples', source: 'LinkedIn Learning · 2024' },
+      { name: 'Microsoft Azure Administrator (AZ-104)', source: 'Microsoft', status: 'In Progress' },
+      { name: 'Microsoft Azure DevOps Engineer Expert (AZ-400)', source: 'Microsoft', status: 'Planned' },
+      { name: 'Microsoft Azure AI Cloud Developer Associate (AI-200)', source: 'Microsoft', status: 'Planned' }
     ],
 
     languages: [
