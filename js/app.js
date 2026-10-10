@@ -22,17 +22,19 @@
   app.constant('CONTENT', {
     profile: {
       name: 'Adnan Mansha',
+      title: 'C#/.NET Software Developer',
       roles: [
-        'Software Developer — C# / .NET',
-        'Backend & API Engineer',
-        'WPF / MVVM Specialist',
-        'ASP.NET Core MVC Developer'
+        'C# / .NET Software Developer',
+        'WPF / MVVM Application Developer',
+        'Backend & REST API Engineer',
+        'Industrial Machine-Control Software'
       ],
-      summary: 'Results-oriented developer with 4+ years building scalable backend ' +
-        'services and cross-platform applications in C#, .NET and ASP.NET Core. Deep ' +
-        'experience in RESTful APIs, WPF/MVVM desktop systems, and the concurrency and ' +
-        'TCP/IP architecture behind hardware-interfacing production software. ' +
-        'M.Sc. in Automotive Software Engineering.',
+      summary: 'Software Developer with 4+ years of experience in C#/.NET, building ' +
+        'WPF/MVVM applications and backend services for industrial machine-control ' +
+        'software. Experienced in REST APIs, ASP.NET Core (MVC), Python/Flask, Vue.js, ' +
+        'SQL databases, Docker, CI/CD and Test-Driven Development (TDD). Strong in clean ' +
+        'architecture, design patterns and multithreading. Holds an M.Sc. in Automotive ' +
+        'Software Engineering from TU Chemnitz, Germany.',
       email: 'adnanmansha64@gmail.com',
       phone: '+49 177 6925955',
       phoneHref: 'tel:+491776925955',
@@ -45,78 +47,76 @@
 
     stats: [
       { value: 4,  suffix: '+', label: 'Years experience' },
-      { value: 50, suffix: '+', label: 'Tests written' },
       { value: 6,  suffix: '',  label: 'Roles delivered' },
+      { value: 97, suffix: '%', label: 'Verification accuracy' },
       { text: 'M.Sc.', label: 'Automotive SE' }
     ],
 
     about: [
       {
-        icon: 'i-layers',
-        title: 'Backend & APIs',
-        text: 'ASP.NET Core MVC services and RESTful APIs designed around SOLID and ' +
-              'dependency injection, with clean separation between transport, domain ' +
-              'and persistence.'
+        icon: 'i-code',
+        title: 'Industrial machine-control software',
+        text: 'WPF/MVVM applications for production inspection machines, using Prism ' +
+              'and the WPF Dispatcher so background work updates the UI safely and ' +
+              'never freezes it.'
       },
       {
-        icon: 'i-code',
-        title: 'Desktop (WPF / MVVM)',
-        text: 'Production WPF applications using MVVM and Prism, including UI-thread ' +
-              'marshalling via Dispatcher so background work never blocks or corrupts ' +
-              'the interface.'
+        icon: 'i-layers',
+        title: 'Backend services & REST APIs',
+        text: 'C# services and RESTful APIs — vehicle-listing synchronisation, ' +
+              'barcode lifecycle tracking, ASP.NET Core (MVC) and Flask (MVC) web ' +
+              'applications backed by SQL stores.'
       },
       {
         icon: 'i-branch',
-        title: 'Concurrency & networking',
-        text: 'Async/await, TCP/IP client–server layers and Publisher/Subscriber ' +
-              'messaging — including hunting down the race conditions and deadlocks ' +
-              'that come with them.'
+        title: 'Concurrency & distributed communication',
+        text: 'Client–server TCP/IP with publish–subscribe messaging, and the race ' +
+              'conditions and deadlocks that come with it — resolved via async/await, ' +
+              'SynchronizationContext, ConfigureAwait and TaskScheduler.'
       },
       {
         icon: 'i-beaker',
-        title: 'Testing & quality',
-        text: 'TDD by default: 50+ unit and integration tests on recent feature work, ' +
-              'validated on production machines, with architecture documented for the ' +
-              'next developer.'
+        title: 'Clean architecture & TDD',
+        text: 'SOLID, dependency injection and Factory, Repository, Observer and ' +
+              'Mediator patterns, backed by unit and integration tests and architecture ' +
+              'documentation in IBM RTC and Gitea.'
       }
     ],
 
     proficiencies: [
-      { name: 'C# / .NET',               level: 95 },
-      { name: 'WPF / MVVM',              level: 90 },
-      { name: 'ASP.NET Core MVC',        level: 85 },
-      { name: 'REST APIs & async',       level: 88 },
-      { name: 'SQL & databases',         level: 80 },
-      { name: 'Docker & CI/CD',          level: 78 },
-      { name: 'Python / Flask',          level: 75 },
-      { name: 'TypeScript / JavaScript', level: 70 }
+      { name: 'C# / .NET',                level: 95 },
+      { name: 'WPF / XAML (MVVM)',        level: 90 },
+      { name: 'REST APIs',                level: 88 },
+      { name: 'Async & multithreading',   level: 88 },
+      { name: 'ASP.NET Core (MVC)',       level: 80 },
+      { name: 'SQL & databases',          level: 80 },
+      { name: 'Python / Flask',           level: 75 },
+      { name: 'Docker & CI/CD',           level: 75 }
     ],
 
     skillGroups: [
-      { icon: 'i-code',     title: 'Programming',
-        tags: ['C#', 'LINQ', 'async/await', 'Generics', 'Python', 'TypeScript', 'JavaScript'], lead: 1 },
-      { icon: 'i-layers',   title: 'Frameworks',
-        tags: ['.NET', 'ASP.NET Core MVC', 'WPF (MVVM)', 'Prism', 'REST APIs', 'Flask', 'Vue.js', 'Node.js', 'MS Power Apps'], lead: 1 },
-      { icon: 'i-branch',   title: 'Design & architecture',
-        tags: ['SOLID', 'Dependency Injection', 'Unity Container', 'Factory', 'Repository', 'Observer', 'Mediator', 'Singleton', 'Client–Server', 'Pub/Sub', 'TCP/IP'], lead: 1 },
-      { icon: 'i-database', title: 'Databases',
+      { icon: 'i-code',   title: 'Programming languages',
+        tags: ['C#', 'Python', 'TypeScript', 'JavaScript', 'SQL', 'Java (academic)', 'C++ (academic)'], lead: 1 },
+      { icon: 'i-layers', title: 'Frameworks & libraries',
+        tags: ['.NET', 'ASP.NET Core (MVC)', 'WPF/XAML (MVVM)', 'Flask', 'Vue.js', 'Node.js', 'MS Power Apps', 'pandas', 'OpenCV', 'Matplotlib'], lead: 1 },
+      { icon: 'i-globe',  title: 'Web & APIs',
+        tags: ['REST APIs', 'HTML5', 'CSS3', 'Bootstrap'], lead: 1 },
+      { icon: 'i-database', title: 'Data & databases',
         tags: ['PostgreSQL', 'MySQL', 'SQLite', 'MongoDB', 'MS Dataverse', 'MinIO'], lead: 0 },
-      { icon: 'i-cloud',    title: 'Cloud & DevOps',
-        tags: ['AWS S3', 'Docker', 'CI/CD', 'Jenkins', 'GitLab CI', 'Linux'], lead: 0 },
-      { icon: 'i-beaker',   title: 'Testing',
-        tags: ['TDD', 'Unit testing', 'Integration testing', 'Production validation'], lead: 1 },
-      { icon: 'i-chart',    title: 'Monitoring',
-        tags: ['Elasticsearch', 'Kibana', 'Prometheus', 'Grafana'], lead: 0 },
-      { icon: 'i-globe',    title: 'Web technologies',
-        tags: ['HTML5', 'CSS3', 'XAML', 'Bootstrap', 'AngularJS'], lead: 0 },
-      { icon: 'i-branch',   title: 'Version control',
-        tags: ['Git', 'GitHub', 'GitLab', 'Gitea', 'Bitbucket'], lead: 0 },
-      { icon: 'i-users',    title: 'Collaboration',
-        tags: ['Scrum', 'Jira', 'Code reviews', 'Cross-functional teams', 'RTC'], lead: 0 },
-      { icon: 'i-wrench',   title: 'Dev tools',
-        tags: ['Visual Studio', 'VS Code', 'Postman', 'Rider'], lead: 0 },
-      { icon: 'i-sparkle',  title: 'AI tools',
-        tags: ['Claude', 'ChatGPT', 'MS Copilot', 'Windsurf IDE'], lead: 0 }
+      { icon: 'i-branch', title: 'Architecture & concepts',
+        tags: ['OOP', 'SOLID', 'Dependency Injection (Unity Container)', 'Factory', 'Repository', 'Observer', 'Mediator', 'Async/Await', 'Multithreading', 'Reflection', 'XML/XSD Serialization'], lead: 1 },
+      { icon: 'i-beaker', title: 'Testing & version control',
+        tags: ['TDD', 'Unit & Integration Testing', 'Git', 'GitHub', 'GitLab', 'Gitea', 'Bitbucket'], lead: 1 },
+      { icon: 'i-wrench', title: 'Systems & domains',
+        tags: ['Industrial machine-control software', 'Client–Server & TCP/IP', 'Publish–Subscribe', 'Vision systems (AOI)'], lead: 1 },
+      { icon: 'i-cloud',  title: 'DevOps & monitoring',
+        tags: ['Docker', 'GitLab CI/CD', 'Linux', 'Jenkins', 'Elasticsearch', 'Kibana', 'Prometheus/Grafana (basic)'], lead: 0 },
+      { icon: 'i-users',  title: 'Tools & collaboration',
+        tags: ['Visual Studio', 'VS Code', 'Postman', 'Jira', 'Scrum', 'Kanban', 'Code Reviews'], lead: 0 },
+      { icon: 'i-sparkle', title: 'AI-assisted development',
+        tags: ['MS Copilot', 'Claude Code', 'Windsurf'], lead: 0 },
+      { icon: 'i-chart',  title: 'Soft skills',
+        tags: ['Problem Solving', 'Quick Learning', 'Team Collaboration', 'Stakeholder Communication'], lead: 0 }
     ],
 
     jobs: [
@@ -124,41 +124,39 @@
         current: true,
         date: '11/2023 — 08/2026',
         title: 'Software Developer',
-        org: 'Ferchau GmbH — deployed at Laser Imaging System GmbH (KLA Co.)',
+        org: 'Ferchau GmbH (deployed at Laser Imaging System GmbH — KLA Co.)',
         place: 'Jena, Germany',
-        excerpt: 'Owned seven features end to end on a production wafer-inspection ' +
-                 'platform — remote access architecture, TCP/IP refactoring, async ' +
-                 'firmware checks and a Mediator-based logging rewrite — all under TDD ' +
-                 'with 50+ tests.',
-        tags: ['C#', '.NET', 'WPF/MVVM', 'Prism', 'TCP/IP', 'async/await'],
+        excerpt: 'Machine-control software for production inspection systems: moved ' +
+                 'client–server communication to a distributed architecture, rebuilt a ' +
+                 'legacy logging module around the Mediator pattern, and delivered ' +
+                 'machine features from requirements through to production validation.',
+        tags: ['C#', '.NET', 'WPF (MVVM)', 'Prism', 'Design Patterns', 'RTC', 'Gitea'],
         detailHeading: 'What I delivered',
         details: [
-          { lead: 'Remote access handling:', text: 'evolved client–server communication from a localhost-only TCP/IP setup to a distributed architecture with a configurable server IP, using async/await and non-blocking operations to keep the UI responsive during remote communication.' },
-          { lead: 'Production log refactoring:', text: 'redesigned an under-optimised legacy logging module around the Mediator pattern to reduce coupling and complexity, resolving blocking and concurrency issues in the process.' },
-          { lead: 'Firmware version checker:', text: 'implemented an asynchronous firmware version-check feature end to end — requirements, async/await implementation, unit and integration tests, and validation on production machines.' },
-          { lead: 'Range slider configuration:', text: 'delivered a configurable range-slider feature using the WPF Dispatcher and UI-threading to safely marshal background-thread updates onto the UI, covered by unit and integration tests.' },
-          { lead: 'R&D feature toggle:', text: 'extended the feature-toggle framework to isolate experimental functionality from production-ready features.' },
-          { lead: 'TCP/IP communication refactoring:', text: 'introduced a reusable NuGet-based communication object and a Publisher/Subscriber pattern, resolving race conditions and deadlocks via SynchronizationContext, ConfigureAwait and the Task Scheduler.' },
-          { lead: '.NET performance & concurrency:', text: 'applied SOLID, dependency injection and design patterns (Factory, Repository, Observer, Mediator), backed by TDD and 50+ unit and integration tests, with architecture documented in RTC and Gitea.' }
+          { lead: 'Distributed TCP/IP communication:', text: 'moved the client–server communication from a localhost-only setup to a distributed network architecture with a configurable server IP, enabling remote access. Introduced a reusable NuGet-based communication component with a publish–subscribe pattern, and resolved race conditions and deadlocks using async/await, SynchronizationContext, ConfigureAwait and TaskScheduler.' },
+          { lead: 'Production log refactoring:', text: 'analysed a complex legacy logging module through code review and debugging, then redesigned it with the Mediator pattern. Delivered a loosely coupled, optimised implementation that removed blocking and concurrency issues, after prototyping and aligning the solution with the team.' },
+          { lead: 'Machine features from requirements to production:', text: 'delivered an asynchronous firmware version checker and a configurable range-slider for module settings. This covered stakeholder requirements, solution presentations, prototyping and implementation, using the WPF Dispatcher for safe UI updates from background threads. Both features were validated on production machines.' },
+          { lead: 'R&D feature toggle:', text: 'extended the feature-toggle framework to separate R&D functionality from production-ready features, so experimental features could be developed and tested without affecting production machines.' },
+          { lead: 'Code quality and performance:', text: 'optimised .NET components for responsiveness and thread safety, applying SOLID principles, dependency injection and Factory, Repository, Observer and Mediator patterns. Backed by TDD with unit and integration tests and technical architecture documentation (IBM RTC, Gitea).' }
         ],
-        stack: ['C#', '.NET', 'WPF', 'MVVM', 'Prism', 'Unity Container', 'TCP/IP', 'async/await', 'TDD', 'Gitea', 'RTC']
+        stack: ['C#', '.NET', 'WPF', 'MVVM', 'Prism', 'TCP/IP', 'async/await', 'TDD', 'IBM RTC', 'Gitea']
       },
       {
         date: '03/2023 — 09/2023',
         title: 'Software Developer',
         org: 'Modulacht GmbH',
         place: 'Truchtlaching, Germany',
-        excerpt: 'Built C#/.NET WPF applications on MVVM plus a Power Apps/Dataverse ' +
-                 'solution, joined by custom REST APIs for secure data exchange with ' +
-                 'business systems.',
-        tags: ['C#', '.NET', 'WPF/MVVM', 'Power Apps', 'Dataverse'],
+        excerpt: 'C# services and REST APIs around Microsoft Dataverse — vehicle-listing ' +
+                 'synchronisation with mobile.de and AutoScout24, barcode lifecycle ' +
+                 'tracking, and a WPF tool that generates C# enums from the data model.',
+        tags: ['C#', '.NET', 'WPF (MVVM)', 'MS Power Apps', 'Dataverse', 'REST APIs'],
         detailHeading: 'What I delivered',
         details: [
-          { text: 'Developed C#/.NET WPF applications using MVVM for maintainable, structured UI solutions.' },
-          { text: 'Built a Power Apps/Dataverse solution to automate business processes and data management.' },
-          { text: 'Designed custom RESTful APIs for secure data exchange between Power Apps, Dataverse and business systems.' }
+          { lead: 'Vehicle listing synchronisation:', text: "developed a C# service that automatically synced a client's vehicle ads with mobile.de and AutoScout24 via REST APIs, using data from Microsoft Dataverse." },
+          { lead: 'Multiloop box-tracking system:', text: 'built custom REST APIs to track reusable boxes by barcode/GUID through their recycling lifecycle, used by the frontend team in Power Apps.' },
+          { lead: 'Dataverse Enum Generator:', text: 'created a WPF (MVVM) tool that connects to Dataverse and directly generates reusable C# enum classes (.cs files) from the selected entity definitions, keeping the code in sync with the data model.' }
         ],
-        stack: ['C#', '.NET', 'WPF', 'MVVM', 'MS Power Apps', 'Dataverse', 'REST APIs']
+        stack: ['C#', '.NET', 'WPF', 'MVVM', 'MS Dataverse', 'MS Power Apps', 'REST APIs']
       },
       {
         date: '10/2022 — 02/2023',
@@ -166,171 +164,217 @@
         titleNote: '(Working Student)',
         org: 'Exxeta AG',
         place: 'Stuttgart, Germany',
-        excerpt: 'Delivered a Vue.js/Node.js web application with full observability — ' +
-                 'Elasticsearch, Kibana, Prometheus and Grafana — on Docker environments ' +
-                 'and GitLab CI/CD.',
-        tags: ['Vue.js', 'Node.js', 'Docker', 'GitLab CI/CD', 'Grafana'],
+        excerpt: 'Contributed to "Quiz Me", a quiz application with a Vue.js frontend and ' +
+                 'a Node.js backend using socket-based client–server communication, with ' +
+                 'Elasticsearch/Kibana logging on Docker and GitLab CI/CD.',
+        tags: ['Node.js', 'Vue.js', 'TypeScript', 'Elasticsearch', 'Docker'],
         detailHeading: 'What I delivered',
         details: [
-          { text: 'Built a Vue.js/Node.js web application with logging and monitoring via Elasticsearch, Kibana, Prometheus and Grafana.' },
-          { text: 'Managed Docker-based environments and GitLab CI/CD pipelines for automated builds, testing and deployments.' }
+          { lead: '"Quiz Me" web application:', text: 'contributed to the development of a quiz application with a Vue.js frontend and a Node.js backend, including socket-based client–server communication.' },
+          { lead: 'Logging and monitoring:', text: 'used Elasticsearch and Kibana for application logging, and gained working knowledge of Prometheus and Grafana for application monitoring.' },
+          { lead: 'Docker and CI/CD:', text: "worked with Docker-based environments and contributed to maintaining the application's GitLab CI/CD pipeline." }
         ],
-        stack: ['Vue.js', 'Node.js', 'Docker', 'GitLab CI/CD', 'Elasticsearch', 'Kibana', 'Prometheus', 'Grafana']
+        stack: ['Vue.js', 'Node.js', 'TypeScript', 'Elasticsearch', 'Kibana', 'Docker', 'GitLab CI/CD']
       },
       {
         date: '11/2021 — 07/2022',
         title: "Master's Thesis",
         org: 'Robert Bosch GmbH',
         place: 'Reutlingen, Germany',
-        excerpt: 'Built data-processing pipelines and MVC user interfaces for vision ' +
-                 'systems, including a client–server architecture, REST APIs and ' +
-                 'Docker-based CI/CD automation.',
-        tags: ['Python', 'Flask', 'MVC', 'Docker', 'REST'],
+        excerpt: 'Python ETL pipelines moving inspection images from Halcon and Keyence ' +
+                 'machines into a MinIO (S3) object store — cutting the daily transfer ' +
+                 'from a full day to 3–4 hours — plus a Flask (MVC) web app for defect analysis.',
+        tags: ['Python', 'Flask (MVC)', 'MinIO', 'RESTful APIs', 'SQLite'],
         detailHeading: 'What I delivered',
         details: [
-          { text: 'Built data-processing pipelines and MVC-based user interfaces for vision systems, including a client–server architecture and RESTful APIs.' },
-          { text: 'Automated build, testing and deployment with Docker, CI/CD and Git across backend and test environments.' }
+          { lead: 'Automated data pipelines:', text: 'built Python ETL pipelines moving inspection images from Halcon and Keyence machines into a MinIO (S3) object store, cutting the daily data transfer from a full day to 3–4 hours.' },
+          { lead: 'Reliable data lifecycle:', text: 'tracked upload, validation and deletion per machine in SQLite, so files are removed from machines only after they are confirmed in storage.' },
+          { lead: 'REST APIs and web interface:', text: 'developed a Flask (MVC) web app with REST APIs to filter, visualise and annotate inspection images for defect analysis.' }
         ],
-        stack: ['Python', 'Flask', 'MVC', 'REST APIs', 'Docker', 'CI/CD', 'Git']
+        stack: ['Python', 'Flask', 'MVC', 'MinIO (S3)', 'SQLite', 'REST APIs', 'ETL']
       },
       {
         date: '03/2021 — 08/2021',
         title: 'Software Developer',
-        titleNote: '(Internship)',
+        titleNote: '(Mandatory Internship)',
         org: 'Robert Bosch GmbH',
         place: 'Stuttgart, Germany',
-        excerpt: 'Built a C#/WPF validation tool on MVVM with unit tests for data ' +
-                 'consistency, and automated the release process that followed ' +
-                 'successful validation.',
-        tags: ['C#', 'WPF/MVVM', 'Unit testing', 'Automation'],
+        excerpt: 'Replaced a slow WinForms validation tool with a C#/WPF (MVVM) ' +
+                 'application using async processing, built on a reflection-based ' +
+                 'validation engine where new rules plug in without code changes.',
+        tags: ['C#', '.NET', 'WPF (MVVM)', 'Reflection', 'Unit testing'],
         detailHeading: 'What I delivered',
         details: [
-          { text: 'Built a C#/WPF validation tool using MVVM, with unit tests to ensure data consistency and quality.' },
-          { text: 'Automated release processes following successful validation to reduce manual intervention.' }
+          { lead: 'Legacy tool replacement:', text: 'built a C#/WPF (MVVM) validation tool replacing a slow WinForms tool, using async processing to remove GUI freezes.' },
+          { lead: 'Extensible validation engine:', text: 'designed a reflection-based engine for XML repository data (GUID, naming, path and version checks) where new rules plug in without code changes, covered by unit tests.' },
+          { lead: 'User interface and release workflow:', text: 'built a navigation tree, persistent favourites and results grid, plus a one-click release that emails the validated object via Outlook.' }
         ],
-        stack: ['C#', 'WPF', 'MVVM', 'Unit testing', 'Release automation']
+        stack: ['C#', '.NET', 'WPF', 'MVVM', 'Reflection', 'XML', 'Unit testing']
       },
       {
         date: '10/2018 — 12/2020',
         title: 'Data Worker',
         titleNote: '(Working Student)',
-        org: 'Solactive Technologies',
+        org: 'Solactive Technologies GmbH',
         place: 'Dresden, Germany',
-        excerpt: 'Prepared, classified and quality-assured product and target data ' +
-                 'supporting data science workflows and model development, using the ' +
-                 'WebAnno annotation tool.',
+        excerpt: 'Annotated and classified financial documents and securities ' +
+                 'prospectuses to build the target database for data-mining applications ' +
+                 'processing financial market data.',
         tags: ['WebAnno', 'Data QA', 'Classification'],
         detailHeading: 'What I delivered',
         details: [
-          { text: 'Prepared, classified and quality-assured product and target data to support data science workflows and model development, using the WebAnno annotation tool.' }
+          { lead: 'Document annotation:', text: 'annotated financial documents to build the target database for data-mining applications that process financial market data.' },
+          { lead: 'Prospectus classification:', text: 'classified securities prospectuses used for index products such as ETFs.' },
+          { lead: 'Data quality management:', text: 'performed quality management of the data in the database to keep it accurate and consistent for downstream data-science workflows.' }
         ],
-        stack: ['WebAnno', 'Data QA', 'Data classification']
+        stack: ['WebAnno', 'Data annotation', 'Data QA']
       }
     ],
 
     projects: [
       {
         icon: 'i-branch',
-        title: 'TCP/IP communication layer refactor',
-        context: 'KLA Co. · production system',
-        desc: 'Rebuilt a client–server TCP/IP layer around a reusable NuGet package ' +
-              'and Publisher/Subscriber messaging, resolving race conditions and deadlocks.',
-        tags: ['C#', 'TCP/IP', 'Pub/Sub', 'Concurrency'],
+        title: 'Distributed TCP/IP communication',
+        context: 'KLA Co. · production system, 2023–2026',
+        desc: 'Moved client–server communication from localhost-only to a distributed ' +
+              'network architecture with a configurable server IP, enabling remote access.',
+        tags: ['C#', 'TCP/IP', 'Publish–Subscribe', 'async/await'],
         sections: [
-          { heading: 'The problem', items: [
-            { text: 'The existing client–server TCP/IP layer suffered from race conditions and deadlocks, and its communication code was duplicated across components with no single owner.' }
-          ]},
           { heading: 'What I did', items: [
-            { text: 'Extracted a reusable, NuGet-packaged communication object so every component shared one tested transport implementation.' },
-            { text: 'Introduced a Publisher/Subscriber pattern to decouple message producers from consumers.' },
-            { text: 'Resolved the concurrency defects through correct use of SynchronizationContext, ConfigureAwait and the Task Scheduler.' }
+            { text: 'Re-architected the transport so the server IP is configurable, turning a localhost-only deployment into a genuinely distributed one.' },
+            { lead: 'Reusable component:', text: 'introduced a NuGet-based communication component with a publish–subscribe pattern, so every consumer shared one tested implementation.' },
+            { lead: 'Concurrency defects:', text: 'resolved race conditions and deadlocks using async/await, SynchronizationContext, ConfigureAwait and TaskScheduler.' }
           ]}
         ],
-        stack: ['C#', '.NET', 'TCP/IP', 'Pub/Sub', 'NuGet', 'async/await']
-      },
-      {
-        icon: 'i-cloud',
-        title: 'Distributed remote-access architecture',
-        context: 'KLA Co. · production system',
-        desc: 'Moved client–server communication from localhost-only to a ' +
-              'network-configurable architecture, keeping the UI responsive with ' +
-              'async/await throughout.',
-        tags: ['.NET', 'async/await', 'Networking'],
-        sections: [
-          { heading: 'The problem', items: [
-            { text: 'Client and server could only talk over localhost, so the inspection software could not be operated remotely.' }
-          ]},
-          { heading: 'What I did', items: [
-            { text: 'Re-architected the communication path to accept a configurable server IP, making the deployment genuinely distributed.' },
-            { text: 'Converted blocking calls to async/await and non-blocking operations so the WPF UI stays responsive across network latency.' }
-          ]}
-        ],
-        stack: ['.NET', 'WPF', 'async/await', 'Networking', 'TCP/IP']
+        stack: ['C#', '.NET', 'TCP/IP', 'NuGet', 'Publish–Subscribe', 'async/await']
       },
       {
         icon: 'i-layers',
-        title: 'Production log refactor',
-        context: 'KLA Co. · internal tooling',
-        desc: 'Redesigned a tightly-coupled legacy logging module around the Mediator ' +
-              'pattern, cutting complexity and resolving blocking and concurrency issues.',
-        tags: ['Mediator', 'Refactoring', 'Concurrency'],
+        title: 'Production log refactoring',
+        context: 'KLA Co. · internal tooling, 2023–2026',
+        desc: 'Redesigned a complex legacy logging module with the Mediator pattern, ' +
+              'removing blocking and concurrency issues from a tightly coupled design.',
+        tags: ['C#', 'Mediator', 'Refactoring', 'Concurrency'],
         sections: [
-          { heading: 'The problem', items: [
-            { text: 'A legacy logging module was tightly coupled to its callers, hard to reason about, and the source of blocking and concurrency issues in production.' }
-          ]},
           { heading: 'What I did', items: [
-            { text: 'Ran a full documentation and debugging review to map actual behaviour before changing anything.' },
-            { text: 'Redesigned the module around the Mediator pattern to reduce coupling and complexity.' },
-            { text: 'Resolved the underlying blocking and concurrency defects as part of the rewrite.' }
+            { text: 'Analysed the legacy module through code review and debugging before changing anything.' },
+            { text: 'Redesigned it with the Mediator pattern, delivering a loosely coupled, optimised implementation.' },
+            { text: 'Removed the blocking and concurrency issues, after prototyping and aligning the solution with the team.' }
           ]}
         ],
-        stack: ['C#', 'Mediator pattern', 'Refactoring', 'Concurrency']
+        stack: ['C#', '.NET', 'Mediator pattern', 'Refactoring']
       },
       {
         icon: 'i-check',
-        title: 'Firmware version checker',
-        context: 'KLA Co. · production feature',
-        desc: 'Delivered an asynchronous firmware version-check feature from ' +
-              'requirements through to production validation, with dedicated test coverage.',
-        tags: ['async/await', 'Testing', 'Firmware'],
+        title: 'Machine features: firmware checker & range slider',
+        context: 'KLA Co. · production features, 2023–2026',
+        desc: 'An asynchronous firmware version checker and a configurable range-slider ' +
+              'for module settings, taken from stakeholder requirements through to ' +
+              'validation on production machines.',
+        tags: ['C#', 'WPF Dispatcher', 'async/await', 'Testing'],
         sections: [
           { heading: 'What I did', items: [
-            { text: 'Owned the feature end to end: gathered and clarified requirements, then implemented an asynchronous firmware version check.' },
-            { text: 'Wrote dedicated unit and integration tests, then validated the behaviour on production machines.' }
+            { text: 'Covered stakeholder requirements, solution presentations, prototyping and implementation.' },
+            { lead: 'UI threading:', text: 'used the WPF Dispatcher for safe UI updates from background threads.' },
+            { text: 'Both features were validated on production machines.' }
           ]}
         ],
-        stack: ['C#', 'async/await', 'Unit testing', 'Integration testing']
+        stack: ['C#', '.NET', 'WPF', 'Dispatcher', 'async/await']
+      },
+      {
+        icon: 'i-cloud',
+        title: 'Vehicle listing synchronisation',
+        context: 'Modulacht GmbH · 2023',
+        desc: "C# service that automatically synced a client's vehicle ads with mobile.de " +
+              'and AutoScout24 via REST APIs, driven by data from Microsoft Dataverse.',
+        tags: ['C#', 'REST APIs', 'MS Dataverse', 'Integration'],
+        sections: [
+          { heading: 'What I built', items: [
+            { text: "A C# service that automatically synced a client's vehicle advertisements with mobile.de and AutoScout24 over their REST APIs." },
+            { text: 'Microsoft Dataverse supplied the source data, so the listings stayed consistent with the business system.' }
+          ]}
+        ],
+        stack: ['C#', '.NET', 'REST APIs', 'MS Dataverse']
+      },
+      {
+        icon: 'i-wrench',
+        title: 'Dataverse Enum Generator',
+        context: 'Modulacht GmbH · 2023',
+        desc: 'WPF (MVVM) tool that connects to Dataverse and generates reusable C# enum ' +
+              'classes directly from selected entity definitions, keeping code in sync ' +
+              'with the data model.',
+        tags: ['C#', 'WPF (MVVM)', 'Dataverse', 'Code generation'],
+        sections: [
+          { heading: 'What I built', items: [
+            { text: 'A WPF (MVVM) tool that connects to Dataverse and lists the available entity definitions.' },
+            { text: 'It generates reusable C# enum classes (.cs files) directly from the selected entities, so the code cannot drift from the data model.' }
+          ]}
+        ],
+        stack: ['C#', '.NET', 'WPF', 'MVVM', 'MS Dataverse']
       },
       {
         icon: 'i-database',
-        title: 'Proxy provider application',
-        context: 'TU Chemnitz · academic, 2019',
-        desc: 'Retrieved and stored live data from multiple proxy providers via RSS ' +
-              'feeds and APIs into SQL, exposed to the frontend through a custom REST API.',
-        tags: ['ASP.NET Core MVC', 'REST API', 'SQL'],
+        title: 'Automated image ETL into MinIO',
+        context: "Robert Bosch · Master's thesis, 2021–2022",
+        desc: 'Python ETL pipelines moving inspection images from Halcon and Keyence ' +
+              'machines into a MinIO (S3) object store — daily transfer cut from a full ' +
+              'day to 3–4 hours.',
+        tags: ['Python', 'ETL', 'MinIO (S3)', 'SQLite'],
         sections: [
           { heading: 'What I built', items: [
-            { text: 'An application that automatically retrieved live data from multiple proxy providers via RSS feeds and APIs.' },
-            { text: 'Persisted the collected data into a SQL database on a scheduled basis.' },
-            { text: 'Exposed it to the frontend through a custom REST API built on ASP.NET Core MVC.' }
+            { lead: 'Automated data pipelines:', text: 'Python ETL moving inspection images from Halcon and Keyence machines into a MinIO (S3) object store, cutting the daily data transfer from a full day to 3–4 hours.' },
+            { lead: 'Reliable data lifecycle:', text: 'upload, validation and deletion tracked per machine in SQLite, so files are removed from a machine only once confirmed in storage.' },
+            { lead: 'Web interface:', text: 'a Flask (MVC) app with REST APIs to filter, visualise and annotate inspection images for defect analysis.' }
           ]}
         ],
-        stack: ['ASP.NET Core MVC', 'C#', 'REST API', 'SQL', 'RSS']
+        stack: ['Python', 'Flask', 'MinIO (S3)', 'SQLite', 'REST APIs']
+      },
+      {
+        icon: 'i-beaker',
+        title: 'Reflection-based XML validation tool',
+        context: 'Robert Bosch · internship, 2021',
+        desc: 'C#/WPF (MVVM) tool replacing a slow WinForms predecessor, built on a ' +
+              'reflection-based engine where new validation rules plug in without code changes.',
+        tags: ['C#', 'WPF (MVVM)', 'Reflection', 'Unit testing'],
+        sections: [
+          { heading: 'What I built', items: [
+            { lead: 'Legacy replacement:', text: 'a C#/WPF (MVVM) validation tool replacing a slow WinForms tool, using async processing to remove GUI freezes.' },
+            { lead: 'Extensible engine:', text: 'a reflection-based engine for XML repository data (GUID, naming, path and version checks) where new rules plug in without code changes, covered by unit tests.' },
+            { lead: 'Release workflow:', text: 'a navigation tree, persistent favourites and results grid, plus a one-click release that emails the validated object via Outlook.' }
+          ]}
+        ],
+        stack: ['C#', '.NET', 'WPF', 'MVVM', 'Reflection', 'XML', 'Unit testing']
+      },
+      {
+        icon: 'i-globe',
+        title: 'Proxy Provider Application',
+        context: 'TU Chemnitz · academic project, 2019',
+        desc: 'Collected live data from multiple proxy providers via RSS feeds and APIs ' +
+              'into a SQL database, exposed to the frontend through a REST API.',
+        tags: ['C#', 'ASP.NET Core (MVC)', 'REST API', 'SQL'],
+        sections: [
+          { heading: 'What I built', items: [
+            { text: 'Collected live data from multiple proxy providers via RSS feeds and APIs into a SQL database.' },
+            { text: 'Developed a REST API to provide the stored data in a structured format for the frontend.' }
+          ]}
+        ],
+        stack: ['C#', 'ASP.NET Core (MVC)', 'REST API', 'SQL', 'HTML5', 'CSS3', 'JavaScript']
       },
       {
         icon: 'i-award',
-        title: 'Fingerprint & signature verification',
-        context: 'IIU Islamabad · academic, 2015',
-        desc: "C# desktop application verifying fingerprints and signatures through " +
-              "image processing, reaching 97% accuracy — ~25% above the university's own system.",
-        tags: ['C#', 'WinForms', 'Image processing'],
+        title: 'Fingerprint & signature verification system',
+        context: 'IIU Islamabad · academic project, 2015',
+        desc: 'C# desktop application verifying fingerprints and signatures through image ' +
+              "processing, reaching 97% accuracy — about 25% above the university's " +
+              'existing system.',
+        tags: ['C#', 'WinForms', 'Image processing', 'MySQL'],
         sections: [
           { heading: 'What I built', items: [
-            { text: 'A C# desktop application that verifies identity from both fingerprints and handwritten signatures using image-processing techniques.' },
-            { text: 'Reached 97% accuracy — roughly 25% higher than the system the university was using at the time.' }
+            { text: 'A C# desktop application for fingerprint and signature verification using image processing.' },
+            { text: "Achieved 97% verification accuracy, about 25% higher than the university's existing system." }
           ]}
         ],
-        stack: ['C#', 'WinForms', 'Image processing', 'Biometrics']
+        stack: ['C#', '.NET', 'WinForms', 'Image processing', 'MySQL']
       }
     ],
 
@@ -344,17 +388,16 @@
     // `status` marks a certification that is not yet earned, so the page never
     // implies a credential that has not been awarded.
     certifications: [
-      { name: 'C# Essential Training 1: Types and Control Flow', source: 'LinkedIn Learning · 2024' },
-      { name: 'Advanced C#: LINQ, Dynamic Types, Extension Methods & Tuples', source: 'LinkedIn Learning · 2024' },
       { name: 'Microsoft Azure Administrator (AZ-104)', source: 'Microsoft', status: 'In Progress' },
+      { name: 'C# Essential Training 1: Types and Control Flow', source: 'LinkedIn · 2024' },
+      { name: 'Advanced C#: Hands-on with LINQ, Dynamic Types, Extension Methods, and Tuples', source: 'LinkedIn · 2024' },
       { name: 'Microsoft Azure DevOps Engineer Expert (AZ-400)', source: 'Microsoft', status: 'Planned' },
       { name: 'Microsoft Azure AI Cloud Developer Associate (AI-200)', source: 'Microsoft', status: 'Planned' }
     ],
 
     languages: [
-      { name: 'English', level: 'Fluent' },
-      { name: 'German',  level: 'Intermediate' },
-      { name: 'Urdu',    level: 'Native' }
+      { name: 'English', level: 'C1' },
+      { name: 'German',  level: 'B1' }
     ]
   });
 
